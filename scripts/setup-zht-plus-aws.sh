@@ -11,12 +11,12 @@ echo "Fetching Cluster IPs from AWS..."
 #  - copy zht+ binary and configs using pSSH
 #  - start zht+ server on all cluster nodes using pSSH
 
-AMI_ID="ami-xxxxxxxx" 		   # AMI used for cluster node
-INSTANCE_STATE_CODE="16"	   # 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), 80 (stopped)
-PRIVATE_KEY="xxxx.pem"       # ssh private-key file
-HOST_FILE_LOCATION="bin/*"   # location of the files to be copied to remote node
-REMOTE_FILE_LOCATION="$HOME" # target location on remote node
-ZHT_SERVER_PORT=50000           # port on which ZHT Server will run
+AMI_ID="ami-xxxxxxxx"		# AMI used for cluster node
+INSTANCE_STATE_CODE="16"	# 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), 80 (stopped)
+PRIVATE_KEY="xxxx.pem"		# ssh private-key file
+HOST_FILE_LOCATION="bin/*"	# location of the files to be copied to remote node
+REMOTE_FILE_LOCATION="$HOME"	# target location on remote node
+ZHT_SERVER_PORT=50000		# port on which ZHT Server will run
 
 GET_IP="aws ec2 describe-instances  --query "Reservations[*].Instances[*].PrivateIpAddress" --filter Name=instance-state-code,Values=$INSTANCE_STATE_CODE Name=image-id,Values=$AMI_ID  --output=text"
 
