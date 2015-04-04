@@ -48,6 +48,7 @@ ZHTplusClient::~ZHTplusClient() {
 // Initialize zht-client using zht and neighbor conf
 
 int ZHTplusClient::init(const string& zhtConf, const string& neighborConf) {
+
     return _zc.init(zhtConf, neighborConf);
 }
 
@@ -118,21 +119,22 @@ int ZHTplusClient::ZHTplusGraphAddNodeProperty(string NodeID, string PropertyID,
 //}
 //
 //
-//// Return selected Property value of a Node
-//// TODO : Return the lookup status; Accept result as the last parameter
-//
-//string* ZHTplusClient::ZHTplusGraphGetNodePropertyValue(ZHTClient* zc, string NodeID, string PropertyID) {
-//
-//	string* KVSvalue;
-//	ZHTplusGraph::Node* theNode;
-//	ZHTplusGraph::Property* theProperty;
-//
-//	zc->lookup(NodeID, *KVSvalue);
-//	theNode = parseNodeFromString(*KVSvalue);
-//	theProperty = getNodeProperty(theNode, PropertyID);
-//	return theProperty->mutable_value();
-//}
-//
+// Return selected Property value of a Node
+// TODO : Return the lookup status; Accept result as the last parameter
+
+string* ZHTplusClient::ZHTplusGraphGetNodePropertyValue(string NodeID, string PropertyID) {
+
+	string KVSvalue;
+	ZHTplusGraph::Node theNode;
+	ZHTplusGraph::Property* theProperty;
+
+	_zc.lookup(NodeID, KVSvalue);
+	theNode = parseNodeFromString(KVSvalue);
+	theProperty = getNodeProperty(theNode, PropertyID);
+
+	return theProperty->mutable_value();
+}
+
 //
 //// Return the target NodeID of the selected Edge of a Node
 //// TODO : Return the lookup status; Accept result as the last parameter
@@ -172,12 +174,12 @@ int ZHTplusClient::ZHTplusGraphAddNodeProperty(string NodeID, string PropertyID,
 
 string ZHTplusClient::serializeNodeToString(const ZHTplusGraph::Node& node) {
 
-	string output;
+	string output = "";
 
 	if (node.SerializeToString(&output))
 		return output;
 	else
-		return NULL;
+		return output;
 }
 
 
@@ -403,4 +405,9 @@ bool ZHTplusClient::removeEdgeProperty(ZHTplusGraph::Edge* edge, string property
 	return true;
 }
 
+// Teardown ZHT-Clinet
 
+int ZHTplusClient::teardown() {
+
+	return _zc.teardown();
+}

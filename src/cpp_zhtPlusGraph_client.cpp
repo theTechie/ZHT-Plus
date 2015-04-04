@@ -51,6 +51,10 @@ void test_all() {
 	printf("starting test_insert...\n");
 
 	test_insert();
+
+	printf("starting test_lookup...\n");
+
+	test_lookup();
 }
 
 
@@ -100,9 +104,9 @@ int main(int argc, char **argv) {
 
 			test_all();
 
-			//zc.teardown();
+			zpc.teardown();
 
-			printf("ending...\n");
+			printf("end...\n");
 
 		} else {
 
@@ -127,21 +131,26 @@ void test_insert() {
 
     printf("inserting.....\n");
 
-	int rc = zpc.ZHTplusGraphAddNode("1", "1");
+	int rc = zpc.ZHTplusGraphAddNode("11", "1");
 
 	if (rc == 0)
 		printf("ADD NODE 1 OK, rc(%d)\n", rc);
 	else
 		printf("ADD NODE 1 ERR, rc(%d)\n", rc);
 
-	rc = zpc.ZHTplusGraphAddNode("2", "2");
+	rc = zpc.ZHTplusGraphAddNode("21", "2");
 
 	if (rc == 0)
 		printf("ADD NODE 2 OK, rc(%d)\n", rc);
 	else
 		printf("ADD NODE 2 ERR, rc(%d)\n", rc);
 
-	rc = zpc.ZHTplusGraphAddNodeProperty("1", "2p", "prop12", "12value");
+	rc = zpc.ZHTplusGraphAddNodeProperty("12", "2p", "prop12", "12value");
+
+	if (rc == 0)
+		printf("ADD NODE 1 Property OK, rc(%d)\n", rc);
+	else
+		printf("ADD NODE 1 Property ERR, rc(%d)\n", rc);
 
 //	if (rc == 0)
 //		printf("ADD NODE 2 OK, rc(%d)\n", rc);
@@ -170,9 +179,9 @@ void test_lookup() {
 
 	test_insert();
 
-//    string* result = zpc.ZHTplusGraphGetNodeEdgePropertyValue(&zc, "1", "12", "111");
+    string* result = zpc.ZHTplusGraphGetNodePropertyValue("12", "2p");
 
-//    printf("NodeEdge Lookup Result, value={%s}", result->c_str());
+    printf("NodePropertyValue Lookup Result, value={%s}", result->c_str());
 
 //	int rc = zc.lookup(key, result);
 //
