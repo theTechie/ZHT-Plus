@@ -57,14 +57,14 @@ int ZHTplusClient::init(const string& zhtConf, const string& neighborConf) {
 int ZHTplusClient::ZHTplusGraphAddNode(string NodeID, string NodeName) {
     printf("ZHTplusGraphAddNode.......\n");
     ZHTplusGraph::Node newNode;
-	string* KVSvalue;
+	string KVSvalue;
 
 	newNode = createNode(NodeID, NodeName);
 	printf("ZHTplusGraphAddNode...node created\n");
 	KVSvalue = serializeNodeToString(newNode);
 	printf("serialize done\n");
 	//printf("ZHTplusGraphAddNode...KVSvalue : %s\n", KVSvalue->c_str());
-	return _zc.insert(NodeID, *KVSvalue);
+	return _zc.insert(NodeID, KVSvalue);
 }
 
 
@@ -173,16 +173,16 @@ int ZHTplusClient::ZHTplusGraphAddNode(string NodeID, string NodeName) {
 
 // Serialize the node and store the bytes in the returned string.
 
-string* ZHTplusClient::serializeNodeToString(ZHTplusGraph::Node node) {
+string ZHTplusClient::serializeNodeToString(const ZHTplusGraph::Node &node) {
 
-	string* output;
+	string output;
 
     printf("Serializing...");
 
-	if (node.SerializeToString(output))
+	if (node.SerializeToString(&output))
 		return output;
 	else
-		return (string*) NULL;
+		return (string) NULL;
 }
 
 

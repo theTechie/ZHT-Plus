@@ -57,7 +57,7 @@ public:
     string* ZHTplusGraphGetNodeEdgePropertyValue(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID);
 
 private:
-    string* serializeNodeToString(ZHTplusGraph::Node node);
+    string serializeNodeToString(const ZHTplusGraph::Node& node);
     ZHTplusGraph::Node* parseNodeFromString(string& data);
 
     ZHTplusGraph::Node createNode(string ID, string name);
