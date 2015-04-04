@@ -126,37 +126,43 @@ void printUsage(char *argv_0) {
 void test_insert() {
 
     printf("inserting.....\n");
-    printf("zpc insert status : %d", zpc.ZHTplusGraphAddNode("1", "Node1"));
 
-    //zpc->ZHTplusGraphAddNode("1", "1");
+	int rc = zpc.ZHTplusGraphAddNode("1", "1");
 
-//	int rc = zpc.ZHTplusGraphAddNode(&zc, "1", "1");
-//
-//	if (rc == 0)
-//		printf("ADD NODE 1 OK, rc(%d)\n", rc);
-//	else
-//		printf("ADD NODE 1 ERR, rc(%d)\n", rc);
-//
-//	rc = zpc.ZHTplusGraphAddNode(&zc, "2", "2");
-//
+	if (rc == 0)
+		printf("ADD NODE 1 OK, rc(%d)\n", rc);
+	else
+		printf("ADD NODE 1 ERR, rc(%d)\n", rc);
+
+	rc = zpc.ZHTplusGraphAddNode("2", "2");
+
+	if (rc == 0)
+		printf("ADD NODE 2 OK, rc(%d)\n", rc);
+	else
+		printf("ADD NODE 2 ERR, rc(%d)\n", rc);
+
+	rc = zpc.ZHTplusGraphAddNodeProperty("1", "2p", "prop12", "12value");
+
 //	if (rc == 0)
 //		printf("ADD NODE 2 OK, rc(%d)\n", rc);
 //	else
 //		printf("ADD NODE 2 ERR, rc(%d)\n", rc);
 //
-//	rc = zpc.ZHTplusGraphAddNodeEdge(&zc, "1", "2", "12", "12");
+//	rc = zpc.ZHTplusGraphAddNodeEdge("1", "2", "12", "12");
 //
 //	if (rc == 0)
 //		printf("ADD NODE EDGE OK, rc(%d)\n", rc);
 //	else
 //		printf("ADD NODE EDGE ERR, rc(%d)\n", rc);
 //
-//	rc = zpc.ZHTplusGraphAddNodeEdgeProperty(&zc, "1", "12", "111", "Directed", "No");
+//	rc = zpc.ZHTplusGraphAddNodeEdgeProperty("1", "12", "111", "Directed", "No");
 //
 //	if (rc == 0)
 //		printf("ADD NODE EDGE PROPERTY OK, rc(%d)\n", rc);
 //	else
 //		printf("ADD NODE EDGE PROPERTY ERR, rc(%d)\n", rc);
+
+    printf("inserting complete !");
 
 }
 
