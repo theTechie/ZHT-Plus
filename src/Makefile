@@ -48,7 +48,7 @@ ZHTUtil.o Env.o Util.o \
 HTWorker.o StrTokenizer.o TSafeQueue.o
 	$(CC) $(CCFLAGS) -o $@ $^ $(LIBFLAGS)
 	
-zhtPlus_client: client_ZHTplusGraph.o lock_guard.o cpp_zhtclient.o meta.pb-c.o lru_cache.o meta.pb.o zpack.pb.o novoht.o bigdata_transfer.o\
+zhtPlus_client: cpp_zhtPlusGraph_client.o lock_guard.o cpp_zhtclient.o ZHTplusGraph.o meta.pb-c.o lru_cache.o meta.pb.o zpack.pb.o ZHTplusGraph.pb.o novoht.o bigdata_transfer.o\
 Const.o ConfHandler.o ConfEntry.o \
 ProxyStubFactory.o proxy_stub.o ip_proxy_stub.o mq_proxy_stub.o ipc_plus.o tcp_proxy_stub.o udp_proxy_stub.o \
 ZHTUtil.o Env.o Util.o \

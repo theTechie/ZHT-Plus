@@ -31,36 +31,58 @@
 #ifndef ZHTPLUSGRAPH_H_
 #define ZHTPLUSGRAPH_H_
 
-int ZHTplusGraphAddNode(ZHTClient* zc, string NodeID, string NodeName);
-int ZHTplusGraphAddNodeProperty(ZHTClient* zc, string NodeID, string PropertyID, string PropertyName, string PropertyValue);
-int ZHTplusGraphAddNodeEdge(ZHTClient* zc, string Node1ID, string Node2ID, string EdgeID, string EdgeName);
-int ZHTplusGraphAddNodeEdgeProperty(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID, string PropertyName, string PropertyValue);
+#include <stdint.h>
+#include <map>
+#include <string>
+using namespace std;
 
-string* ZHTplusGraphGetNodePropertyValue(ZHTClient* zc, string NodeID, string PropertyID);
-string* ZHTplusGraphGetNodeEdgeTarget(ZHTClient* zc, string NodeID, string EdgeID);
-string* ZHTplusGraphGetNodeEdgePropertyValue(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID);
+#include "cpp_zhtclient.h"
 
-string* SerializeNodeToString(ZHTplusGraph::Node* node);
-ZHTplusGraph::Node* ParseNodeFromString(const string& data);
+#include "ZHTplusGraph.pb.h"
 
-ZHTplusGraph::Node* createNode(string ID, string name);
-bool deleteNode(ZHTplusGraph::Node* node);
+class ZHTplusClient {
 
-ZHTplusGraph::Property* newNodeProperty(ZHTplusGraph::Node* node, string ID, string name, string value);
-ZHTplusGraph::Property* getNodeProperty(ZHTplusGraph::Node* node, int index);
-ZHTplusGraph::Property* getNodeProperty(ZHTplusGraph::Node* node, string propertyID);
-bool removeNodeProperty(ZHTplusGraph::Node* node, string propertyID);
+public:
+    ZHTplusClient();
+    ZHTplusClient(const string& zhtConf, const string& neighborConf);
+    virtual ~ZHTplusClient();
 
-ZHTplusGraph::Edge* newNodeEdge(ZHTplusGraph::Node* node1, string node2ID, string ID, string name);
-ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node* node, int index);
-ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node* node, string edgeID);
-ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node* node, int index);
-ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node* node, string edgeID);
-bool removeNodeEdge(ZHTplusGraph::Node* node, string edgeID);
+    string test();
+    int ZHTplusGraphAddNode(string NodeID, string NodeName);
+    int ZHTplusGraphAddNodeProperty(ZHTClient* zc, string NodeID, string PropertyID, string PropertyName, string PropertyValue);
+    int ZHTplusGraphAddNodeEdge(ZHTClient* zc, string Node1ID, string Node2ID, string EdgeID, string EdgeName);
+    int ZHTplusGraphAddNodeEdgeProperty(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID, string PropertyName, string PropertyValue);
 
-ZHTplusGraph::Property* newEdgeProperty(ZHTplusGraph::Edge* edge, string ID, string name, string value);
-ZHTplusGraph::Property* getEdgeProperty(ZHTplusGraph::Edge* edge, int index);
-ZHTplusGraph::Property* getEdgeProperty(ZHTplusGraph::Edge* edge, string propertyID);
-bool removeEdgeProperty(ZHTplusGraph::Edge* edge, string propertyID);
+    string* ZHTplusGraphGetNodePropertyValue(ZHTClient* zc, string NodeID, string PropertyID);
+    string* ZHTplusGraphGetNodeEdgeTarget(ZHTClient* zc, string NodeID, string EdgeID);
+    string* ZHTplusGraphGetNodeEdgePropertyValue(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID);
+
+private:
+    string* serializeNodeToString(ZHTplusGraph::Node* node);
+    ZHTplusGraph::Node* parseNodeFromString(string& data);
+
+    ZHTplusGraph::Node* createNode(string ID, string name);
+    bool deleteNode(ZHTplusGraph::Node* node);
+
+    ZHTplusGraph::Property* newNodeProperty(ZHTplusGraph::Node* node, string ID, string name, string value);
+    ZHTplusGraph::Property* getNodeProperty(ZHTplusGraph::Node* node, int index);
+    ZHTplusGraph::Property* getNodeProperty(ZHTplusGraph::Node* node, string propertyID);
+    bool removeNodeProperty(ZHTplusGraph::Node* node, string propertyID);
+
+    ZHTplusGraph::Edge* newNodeEdge(ZHTplusGraph::Node* node1, string node2ID, string ID, string name);
+    ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node* node, int index);
+    ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node* node, string edgeID);
+    ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node* node, int index);
+    ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node* node, string edgeID);
+    bool removeNodeEdge(ZHTplusGraph::Node* node, string edgeID);
+
+    ZHTplusGraph::Property* newEdgeProperty(ZHTplusGraph::Edge* edge, string ID, string name, string value);
+    ZHTplusGraph::Property* getEdgeProperty(ZHTplusGraph::Edge* edge, int index);
+    ZHTplusGraph::Property* getEdgeProperty(ZHTplusGraph::Edge* edge, string propertyID);
+    bool removeEdgeProperty(ZHTplusGraph::Edge* edge, string propertyID);
+
+private:
+    ZHTClient *_zc;
+};
 
 #endif /* ZHTPLUSGRAPH_H_ */

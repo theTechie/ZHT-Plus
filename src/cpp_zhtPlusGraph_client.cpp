@@ -21,14 +21,16 @@
  *      Dongfang Zhao(dzhao8@@hawk.iit.edu) with nickname DZhao,
  *      Ioan Raicu(iraicu@cs.iit.edu).
  *
- * cpp_zhtclient_test.cpp
+ * cpp_zhtPlusGraph_client.cpp
  *
- *  Created on: Aug 7, 2012
- *      Author: Xiaobingo
- *      Contributor: Tony, KWang, DZhao
+ *  Created on: March 30, 2015
+ *      Author: Gagan Munisiddha Gowda
+ *      Contributor: Benjamin Miwa, Anirudh Sunkineni
  */
 
 #include "cpp_zhtclient.h"
+#include "ZHTplusGraph.pb.h"
+#include "ZHTplusGraph.h"
 
 #include  <getopt.h>
 #include  <stdlib.h>
@@ -39,59 +41,18 @@ using namespace std;
 
 void test_insert();
 void test_lookup();
-void test_remove();
-void test_append();
 
 void printUsage(char *argv_0);
 
-ZHTClient zc;
+ZHTplusClient* zpc;
 
 void test_all() {
 
 	printf("starting test_insert...\n");
+
 	test_insert();
-
-	printf("starting test_lookup...\n");
-	test_lookup();
-
-	printf("starting test_remove...\n");
-	test_remove();
-
-	printf("starting test_append...\n");
-	test_append();
 }
 
-void test_lookup_shared(string key) {
-
-	string result;
-	int rc = zc.lookup(key, result);
-
-	if (rc == 0)
-		printf("LOOKUP OK, rc(%d), value={%s}\n", rc, result.c_str());
-	else
-		printf("LOOKUP ERR, rc(%d), value={%s}\n", rc, result.c_str());
-}
-
-void test_all_other() {
-
-	string key = "hello";
-	string val = "1.zht";
-
-	zc.insert(key, val);
-	test_lookup_shared(key);
-
-	val = "2.zht";
-	zc.append(key, val);
-	test_lookup_shared(key);
-
-	val = "3.zht";
-	zc.insert(key, val);
-	test_lookup_shared(key);
-
-	val = "4.zht";
-	zc.append(key, val);
-	test_lookup_shared(key);
-}
 
 int main(int argc, char **argv) {
 
@@ -130,13 +91,15 @@ int main(int argc, char **argv) {
 
 		if (!zhtConf.empty() && !neighborConf.empty()) {
 
-			zc.init(zhtConf, neighborConf);
-
-			test_all_other();
+			//zc.init(zhtConf, neighborConf);
+			printf("starting...\n");
+			zpc = new ZHTplusClient(zhtConf, neighborConf);
 
 			test_all();
 
-			zc.teardown();
+			//zc.teardown();
+
+			printf("ending...\n");
 
 		} else {
 
@@ -159,67 +122,54 @@ void printUsage(char *argv_0) {
 
 void test_insert() {
 
-	string key = "goodman";
-	string val =
-			"[1],The Only Thing Necessary for the Triumph of Evil is that Good Men Do Nothing";
+    printf("inserting.....\n");
+    printf("zpc : %s", zpc->test().c_str());
 
-	int rc = zc.insert(key, val);
+    //zpc->ZHTplusGraphAddNode("1", "1");
 
-	if (rc == 0)
-		printf("INSERT OK, rc(%d)\n", rc);
-	else
-		printf("INSERT ERR, rc(%d)\n", rc);
+//	int rc = zpc.ZHTplusGraphAddNode(&zc, "1", "1");
+//
+//	if (rc == 0)
+//		printf("ADD NODE 1 OK, rc(%d)\n", rc);
+//	else
+//		printf("ADD NODE 1 ERR, rc(%d)\n", rc);
+//
+//	rc = zpc.ZHTplusGraphAddNode(&zc, "2", "2");
+//
+//	if (rc == 0)
+//		printf("ADD NODE 2 OK, rc(%d)\n", rc);
+//	else
+//		printf("ADD NODE 2 ERR, rc(%d)\n", rc);
+//
+//	rc = zpc.ZHTplusGraphAddNodeEdge(&zc, "1", "2", "12", "12");
+//
+//	if (rc == 0)
+//		printf("ADD NODE EDGE OK, rc(%d)\n", rc);
+//	else
+//		printf("ADD NODE EDGE ERR, rc(%d)\n", rc);
+//
+//	rc = zpc.ZHTplusGraphAddNodeEdgeProperty(&zc, "1", "12", "111", "Directed", "No");
+//
+//	if (rc == 0)
+//		printf("ADD NODE EDGE PROPERTY OK, rc(%d)\n", rc);
+//	else
+//		printf("ADD NODE EDGE PROPERTY ERR, rc(%d)\n", rc);
+
 }
 
 void test_lookup() {
 
 	test_insert();
 
-	string key = "goodman";
+//    string* result = zpc.ZHTplusGraphGetNodeEdgePropertyValue(&zc, "1", "12", "111");
 
-	string result;
-	int rc = zc.lookup(key, result);
+//    printf("NodeEdge Lookup Result, value={%s}", result->c_str());
 
-	if (rc == 0)
-		printf("LOOKUP OK, rc(%d), value={%s}\n", rc, result.c_str());
-	else
-		printf("LOOKUP ERR, rc(%d), value={%s}\n", rc, result.c_str());
-}
+//	int rc = zc.lookup(key, result);
+//
+//	if (rc == 0)
+//		printf("LOOKUP OK, rc(%d), value={%s}\n", rc, result.c_str());
+//	else
+//		printf("LOOKUP ERR, rc(%d), value={%s}\n", rc, result.c_str());
 
-void test_remove() {
-
-	test_insert();
-
-	string key = "goodman";
-
-	int rc = zc.remove(key);
-
-	if (rc == 0)
-		printf("REMOVE OK, rc(%d)\n", rc);
-	else
-		printf("REMOVE ERR, rc(%d)\n", rc);
-}
-
-void test_append() {
-
-	test_insert();
-
-	string key = "goodman";
-	string val2 =
-			"[2],The Only Thing Necessary for the Triumph of Evil is that Good Men Do Nothing";
-
-	int rc = zc.append(key, val2);
-
-	if (rc == 0)
-		printf("APPEND OK, rc(%d)\n", rc);
-	else
-		printf("APPEND ERR, rc(%d)\n", rc);
-
-	string result;
-	rc = zc.lookup(key, result);
-
-	if (rc == 0)
-		printf("LOOKUP OK, rc(%d), value={%s}\n", rc, result.c_str()); //todo: consider ": delimited"
-	else
-		printf("LOOKUP ERR, rc(%d), value={%s}\n", rc, result.c_str()); //todo: consider ": delimited"
 }

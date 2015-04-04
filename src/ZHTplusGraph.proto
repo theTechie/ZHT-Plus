@@ -6,7 +6,7 @@ message Node {
   repeated Edge edge_source = 3;
   repeated Edge edge_target = 4;
   repeated Property property = 5;
-  }
+}
 
 message Edge {
   optional string edgeID = 1;
@@ -15,11 +15,11 @@ message Edge {
   optional string target = 4;
   optional bool directed = 5;
   repeated Property property = 6;
-  }
+}
 
 message Property {
   optional string propertyID = 1;
   optional string name = 2;
   optional string value = 3;
-  }
+}
 
