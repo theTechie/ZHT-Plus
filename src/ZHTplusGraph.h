@@ -44,10 +44,9 @@ class ZHTplusClient {
 
 public:
     ZHTplusClient();
-    ZHTplusClient(const string& zhtConf, const string& neighborConf);
     virtual ~ZHTplusClient();
 
-    string test();
+    int init(const string& zhtConf, const string& neighborConf);
     int ZHTplusGraphAddNode(string NodeID, string NodeName);
     int ZHTplusGraphAddNodeProperty(ZHTClient* zc, string NodeID, string PropertyID, string PropertyName, string PropertyValue);
     int ZHTplusGraphAddNodeEdge(ZHTClient* zc, string Node1ID, string Node2ID, string EdgeID, string EdgeName);
@@ -58,10 +57,10 @@ public:
     string* ZHTplusGraphGetNodeEdgePropertyValue(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID);
 
 private:
-    string* serializeNodeToString(ZHTplusGraph::Node* node);
+    string* serializeNodeToString(ZHTplusGraph::Node node);
     ZHTplusGraph::Node* parseNodeFromString(string& data);
 
-    ZHTplusGraph::Node* createNode(string ID, string name);
+    ZHTplusGraph::Node createNode(string ID, string name);
     bool deleteNode(ZHTplusGraph::Node* node);
 
     ZHTplusGraph::Property* newNodeProperty(ZHTplusGraph::Node* node, string ID, string name, string value);
@@ -82,7 +81,7 @@ private:
     bool removeEdgeProperty(ZHTplusGraph::Edge* edge, string propertyID);
 
 private:
-    ZHTClient *_zc;
+    ZHTClient _zc;
 };
 
 #endif /* ZHTPLUSGRAPH_H_ */

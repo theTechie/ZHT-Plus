@@ -44,7 +44,7 @@ void test_lookup();
 
 void printUsage(char *argv_0);
 
-ZHTplusClient* zpc;
+ZHTplusClient zpc;
 
 void test_all() {
 
@@ -93,7 +93,10 @@ int main(int argc, char **argv) {
 
 			//zc.init(zhtConf, neighborConf);
 			printf("starting...\n");
-			zpc = new ZHTplusClient(zhtConf, neighborConf);
+
+			zpc.init(zhtConf, neighborConf);
+
+			printf("configured...\n");
 
 			test_all();
 
@@ -123,7 +126,7 @@ void printUsage(char *argv_0) {
 void test_insert() {
 
     printf("inserting.....\n");
-    printf("zpc : %s", zpc->test().c_str());
+    printf("zpc insert status : %d", zpc.ZHTplusGraphAddNode("1", "Node1"));
 
     //zpc->ZHTplusGraphAddNode("1", "1");
 
