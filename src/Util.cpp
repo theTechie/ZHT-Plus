@@ -146,6 +146,8 @@ void RingUtil::unwrap(uint64_t& begin, uint64_t& end) {
 }
 
 } /* namespace dm */
+namespace graph {
+} /* namespace graph */
 } /* namespace zht */
 } /* namespace datasys */
 } /* namespace iit */

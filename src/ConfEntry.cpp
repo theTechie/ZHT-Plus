@@ -35,88 +35,108 @@
 #include <stdio.h>
 #include <string.h>
 
-namespace iit {
-namespace datasys {
-namespace zht {
-namespace dm {
+namespace iit
+{
+namespace datasys
+{
+namespace zht
+{
+namespace dm
+{
 
-ConfEntry::ConfEntry() {
+ConfEntry::ConfEntry()
+{
 
 }
 
-ConfEntry::ConfEntry(const string& sconfigEntry) {
+ConfEntry::ConfEntry(const string& sconfigEntry)
+{
 
-	assign(sconfigEntry);
+    assign(sconfigEntry);
 }
 
 ConfEntry::ConfEntry(const string& name, const string& value) :
-		_name(name), _value(value) {
+    _name(name), _value(value)
+{
 
 }
 
-ConfEntry::~ConfEntry() {
+ConfEntry::~ConfEntry()
+{
 
 }
 
-string ConfEntry::name() const {
+string ConfEntry::name() const
+{
 
-	return _name;
+    return _name;
 }
 
-void ConfEntry::name(const string& name) {
+void ConfEntry::name(const string& name)
+{
 
-	_name = name;
+    _name = name;
 }
 
-string ConfEntry::value() const {
+string ConfEntry::value() const
+{
 
-	return _value;
+    return _value;
 }
 
-void ConfEntry::value(const string& value) {
+void ConfEntry::value(const string& value)
+{
 
-	_value = value;
+    _value = value;
 }
 
-string ConfEntry::operator()() const {
+string ConfEntry::operator()() const
+{
 
-	return toString();
+    return toString();
 }
 
-string ConfEntry::toString() const {
+string ConfEntry::toString() const
+{
 
-	char buf[50];
-	memset(buf, 0, sizeof(buf));
-	int n = sprintf(buf, getFormat().c_str(), _name.c_str(), _value.c_str());
+    char buf[50];
+    memset(buf, 0, sizeof(buf));
+    int n = sprintf(buf, getFormat().c_str(), _name.c_str(), _value.c_str());
 
-	string result(buf, 0, n);
+    string result(buf, 0, n);
 
-	return result;
+    return result;
 }
 
-ConfEntry& ConfEntry::assign(string sconfigEntry) {
+ConfEntry& ConfEntry::assign(string sconfigEntry)
+{
 
-	const char* delimiter = ",";
+    const char* delimiter = ",";
 
-	string remains = Const::trim(sconfigEntry);
+    string remains = Const::trim(sconfigEntry);
 
-	size_t found = remains.find(delimiter);
+    size_t found = remains.find(delimiter);
 
-	if (found != string::npos) {
+    if (found != string::npos)
+    {
 
-		name(Const::trim(remains.substr(0, int(found))));
-		value(Const::trim(remains.substr(int(found) + 1)));
-	}
+        name(Const::trim(remains.substr(0, int(found))));
+        value(Const::trim(remains.substr(int(found) + 1)));
+    }
 
-	return *this;
+    return *this;
 }
 
-string ConfEntry::getFormat() {
+string ConfEntry::getFormat()
+{
 
-	return "%s,%s";
+    return "%s,%s";
 }
 
 } /* namespace dm */
+namespace graph
+{
+} /* namespace graph */
 } /* namespace zht */
 } /* namespace datasys */
 } /* namespace iit */
