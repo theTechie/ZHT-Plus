@@ -63,6 +63,7 @@ private:
     ZHTplusGraph::Node parseNodeFromString(const string& data);
 
     ZHTplusGraph::Node createNode(string ID, string name);
+    bool isNodeExists(string NodeID);
     bool deleteNode(ZHTplusGraph::Node* node);
 
     ZHTplusGraph::Property* newNodeProperty(ZHTplusGraph::Node& node, string ID, string name, string value);

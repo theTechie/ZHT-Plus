@@ -35,12 +35,15 @@
 #include  <getopt.h>
 #include  <stdlib.h>
 #include  <stdio.h>
+#include  <fstream>
+#include  <sstream>
 #include  <string>
 #include  <exception>
 using namespace std;
 
 void test_insert();
 void test_lookup();
+void loadGraph();
 
 void printUsage(char *argv_0);
 
@@ -95,14 +98,15 @@ int main(int argc, char **argv) {
 
 		if (!zhtConf.empty() && !neighborConf.empty()) {
 
-			//zc.init(zhtConf, neighborConf);
 			printf("starting...\n");
 
 			zpc.init(zhtConf, neighborConf);
 
 			printf("configured...\n");
 
-			test_all();
+			//test_all();
+
+			loadGraph();
 
 			zpc.teardown();
 
@@ -127,6 +131,25 @@ void printUsage(char *argv_0) {
 			"-z zht.conf -n neighbor.conf [-h(help)]");
 }
 
+// Load Graph using the graph dataset stored in file
+void loadGraph() {
+    std::ifstream infile("../datasets/web-Stanford-test.txt");
+    string a, b;
+
+    while (infile >> a >> b)
+    {
+        zpc.ZHTplusGraphAddNode(a, a);
+        zpc.ZHTplusGraphAddNode(b, b);
+
+        stringstream stream;
+        stream << a << "-" << b;
+
+        zpc.ZHTplusGraphAddNodeEdge(a, b, stream.str(), stream.str());
+
+        cout << stream.str() << endl;
+    }
+}
+
 void test_insert() {
 
     printf("inserting.....\n");
@@ -138,7 +161,7 @@ void test_insert() {
 	else
 		printf("ADD NODE 1 ERR, rc(%d)\n", rc);
 
-	rc = zpc.ZHTplusGraphAddNode("2", "2");
+	rc = zpc.ZHTplusGraphAddNode("1", "2");
 
 	if (rc == 0)
 		printf("ADD NODE 2 OK, rc(%d)\n", rc);
