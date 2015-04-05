@@ -53,8 +53,8 @@ public:
     int ZHTplusGraphAddNodeEdgeProperty(string NodeID, string EdgeID, string PropertyID, string PropertyName, string PropertyValue);
 
     string ZHTplusGraphGetNodePropertyValue(string NodeID, string PropertyID);
-    string* ZHTplusGraphGetNodeEdgeTarget(string NodeID, string EdgeID);
-    string* ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string EdgeID, string PropertyID);
+    string ZHTplusGraphGetNodeEdgeTarget(string NodeID, string EdgeID);
+    string ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string EdgeID, string PropertyID);
 
     int teardown();
 
@@ -70,11 +70,11 @@ private:
     ZHTplusGraph::Property* getNodeProperty(ZHTplusGraph::Node& node, string propertyID);
     bool removeNodeProperty(ZHTplusGraph::Node* node, string propertyID);
 
-    ZHTplusGraph::Edge* newNodeEdge(ZHTplusGraph::Node* node1, string node2ID, string ID, string name);
-    ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node* node, int index);
-    ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node* node, string edgeID);
-    ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node* node, int index);
-    ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node* node, string edgeID);
+    ZHTplusGraph::Edge* newNodeEdge(ZHTplusGraph::Node& node1, string node2ID, string ID, string name);
+    ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node& node, int index);
+    ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node& node, string edgeID);
+    ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node& node, int index);
+    ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node& node, string edgeID);
     bool removeNodeEdge(ZHTplusGraph::Node* node, string edgeID);
 
     ZHTplusGraph::Property* newEdgeProperty(ZHTplusGraph::Edge* edge, string ID, string name, string value);

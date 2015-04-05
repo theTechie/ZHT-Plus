@@ -131,45 +131,41 @@ void test_insert() {
 
     printf("inserting.....\n");
 
-	int rc = zpc.ZHTplusGraphAddNode("11", "1");
+	int rc = zpc.ZHTplusGraphAddNode("1", "1");
 
 	if (rc == 0)
 		printf("ADD NODE 1 OK, rc(%d)\n", rc);
 	else
 		printf("ADD NODE 1 ERR, rc(%d)\n", rc);
 
-	rc = zpc.ZHTplusGraphAddNode("21", "2");
+	rc = zpc.ZHTplusGraphAddNode("2", "2");
 
 	if (rc == 0)
 		printf("ADD NODE 2 OK, rc(%d)\n", rc);
 	else
 		printf("ADD NODE 2 ERR, rc(%d)\n", rc);
 
-	rc = zpc.ZHTplusGraphAddNodeProperty("12", "2p", "prop12", "12value");
+	rc = zpc.ZHTplusGraphAddNodeProperty("1", "1p", "prop-1", "prop12value");
 
 	if (rc == 0)
 		printf("ADD NODE 1 Property OK, rc(%d)\n", rc);
 	else
 		printf("ADD NODE 1 Property ERR, rc(%d)\n", rc);
 
-//	if (rc == 0)
-//		printf("ADD NODE 2 OK, rc(%d)\n", rc);
-//	else
-//		printf("ADD NODE 2 ERR, rc(%d)\n", rc);
-//
-//	rc = zpc.ZHTplusGraphAddNodeEdge("1", "2", "12", "12");
-//
-//	if (rc == 0)
-//		printf("ADD NODE EDGE OK, rc(%d)\n", rc);
-//	else
-//		printf("ADD NODE EDGE ERR, rc(%d)\n", rc);
-//
-//	rc = zpc.ZHTplusGraphAddNodeEdgeProperty("1", "12", "111", "Directed", "No");
-//
-//	if (rc == 0)
-//		printf("ADD NODE EDGE PROPERTY OK, rc(%d)\n", rc);
-//	else
-//		printf("ADD NODE EDGE PROPERTY ERR, rc(%d)\n", rc);
+
+	rc = zpc.ZHTplusGraphAddNodeEdge("1", "2", "12", "12-Edge");
+
+	if (rc == 0)
+		printf("ADD NODE EDGE OK, rc(%d)\n", rc);
+	else
+		printf("ADD NODE EDGE ERR, rc(%d)\n", rc);
+
+	rc = zpc.ZHTplusGraphAddNodeEdgeProperty("1", "12", "prop-1-12", "Directed", "No");
+
+	if (rc == 0)
+		printf("ADD NODE EDGE PROPERTY OK, rc(%d)\n", rc);
+	else
+		printf("ADD NODE EDGE PROPERTY ERR, rc(%d)\n", rc);
 
     printf("inserting complete ! \n");
 
@@ -179,15 +175,12 @@ void test_lookup() {
 
 	test_insert();
 
-    string result = zpc.ZHTplusGraphGetNodePropertyValue("12", "2p");
-
+    string result = zpc.ZHTplusGraphGetNodePropertyValue("1", "1p");
     cout << "NodePropertyValue Lookup Result, value : " << result << "\n";
 
-//	int rc = zc.lookup(key, result);
-//
-//	if (rc == 0)
-//		printf("LOOKUP OK, rc(%d), value={%s}\n", rc, result.c_str());
-//	else
-//		printf("LOOKUP ERR, rc(%d), value={%s}\n", rc, result.c_str());
+    result = zpc.ZHTplusGraphGetNodeEdgeTarget("1", "12");
+    cout << "NodeEdgeTarget Lookup Result, value : " << result << "\n";
 
+    result = zpc.ZHTplusGraphGetNodeEdgePropertyValue("1", "12", "prop-1-12");
+    cout << "NodeEdgePropertyValue Lookup Result, value : " << result << "\n";
 }

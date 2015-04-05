@@ -66,7 +66,7 @@ int ZHTplusClient::ZHTplusGraphAddNode(string NodeID, string NodeName) {
 
 
 // Find the node, deserialize it, add the property, reserialize it, remove the old node value, insert the new node value
-
+// TODO : Check if node exisits before adding Node Property
 int ZHTplusClient::ZHTplusGraphAddNodeProperty(string NodeID, string PropertyID, string PropertyName, string PropertyValue) {
 
 	string KVSvalue;
@@ -83,41 +83,41 @@ int ZHTplusClient::ZHTplusGraphAddNodeProperty(string NodeID, string PropertyID,
 }
 
 
-//// Find node1, deserialize it, add the edge from node1 to node2, reserialize node1, remove the old node1 value, insert the new node1 value
-//
-//int ZHTplusClient::ZHTplusGraphAddNodeEdge(ZHTClient* zc, string Node1ID, string Node2ID, string EdgeID, string EdgeName) {
-//
-//	string* KVSvalue;
-//	ZHTplusGraph::Node* theNode;
-//	ZHTplusGraph::Edge* newEdge;
-//
-//	zc->lookup(Node1ID, *KVSvalue);
-//	theNode = parseNodeFromString(*KVSvalue);
-//	newEdge = newNodeEdge(theNode, Node2ID, EdgeID, EdgeName);
-//	KVSvalue = serializeNodeToString(theNode);
-//	zc->remove(Node1ID);
-//	return zc->insert(Node1ID, *KVSvalue);
-//}
-//
-//
-//// Find the node, deserialize it, find the edge, add the property, reserialize it, remove the old node value, insert the new node value
-//
-//int ZHTplusClient::ZHTplusGraphAddNodeEdgeProperty(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID, string PropertyName, string PropertyValue) {
-//
-//	string* KVSvalue;
-//	ZHTplusGraph::Node* theNode;
-//	ZHTplusGraph::Edge* theEdge;
-//	ZHTplusGraph::Property* newProperty;
-//
-//	zc->lookup(NodeID, *KVSvalue);
-//	theNode = parseNodeFromString(*KVSvalue);
-//	theEdge = getNodeEdgeSource(theNode, EdgeID);
-//	newProperty = newEdgeProperty(theEdge, PropertyID, PropertyName, PropertyValue);
-//	KVSvalue = serializeNodeToString(theNode);
-//	zc->remove(NodeID);
-//	return zc->insert(NodeID, *KVSvalue);
-//}
-//
+// Find node1, deserialize it, add the edge from node1 to node2, reserialize node1, remove the old node1 value, insert the new node1 value
+
+int ZHTplusClient::ZHTplusGraphAddNodeEdge(string Node1ID, string Node2ID, string EdgeID, string EdgeName) {
+
+	string KVSvalue;
+	ZHTplusGraph::Node theNode;
+	ZHTplusGraph::Edge* newEdge;
+
+	_zc.lookup(Node1ID, KVSvalue);
+	theNode = parseNodeFromString(KVSvalue);
+	newEdge = newNodeEdge(theNode, Node2ID, EdgeID, EdgeName);
+	KVSvalue = serializeNodeToString(theNode);
+	_zc.remove(Node1ID);
+	return _zc.insert(Node1ID, KVSvalue);
+}
+
+
+// Find the node, deserialize it, find the edge, add the property, reserialize it, remove the old node value, insert the new node value
+
+int ZHTplusClient::ZHTplusGraphAddNodeEdgeProperty(string NodeID, string EdgeID, string PropertyID, string PropertyName, string PropertyValue) {
+
+	string KVSvalue;
+	ZHTplusGraph::Node theNode;
+	ZHTplusGraph::Edge* theEdge;
+	ZHTplusGraph::Property* newProperty;
+
+	_zc.lookup(NodeID, KVSvalue);
+	theNode = parseNodeFromString(KVSvalue);
+	theEdge = getNodeEdgeSource(theNode, EdgeID);
+	newProperty = newEdgeProperty(theEdge, PropertyID, PropertyName, PropertyValue);
+	KVSvalue = serializeNodeToString(theNode);
+	_zc.remove(NodeID);
+	return _zc.insert(NodeID, KVSvalue);
+}
+
 //
 // Return selected Property value of a Node
 // TODO : Return the lookup status; Accept result as the last parameter
@@ -136,39 +136,39 @@ string ZHTplusClient::ZHTplusGraphGetNodePropertyValue(string NodeID, string Pro
 	return theProperty->mutable_value()->c_str();
 }
 
-//
-//// Return the target NodeID of the selected Edge of a Node
-//// TODO : Return the lookup status; Accept result as the last parameter
-//
-//string* ZHTplusClient::ZHTplusGraphGetNodeEdgeTarget(ZHTClient* zc, string NodeID, string EdgeID) {
-//
-//	string* KVSvalue;
-//	ZHTplusGraph::Node* theNode;
-//	ZHTplusGraph::Edge* theEdge;
-//
-//	zc->lookup(NodeID, *KVSvalue);
-//	theNode = parseNodeFromString(*KVSvalue);
-//	theEdge = getNodeEdgeSource(theNode, EdgeID);
-//	return theEdge->mutable_target();
-//}
-//
-//
-//// Return selected Property value of an Edge of a Node
-//// TODO : Return the lookup status; Accept result as the last parameter
-//
-//string* ZHTplusClient::ZHTplusGraphGetNodeEdgePropertyValue(ZHTClient* zc, string NodeID, string EdgeID, string PropertyID) {
-//
-//	string* KVSvalue;
-//	ZHTplusGraph::Node* theNode;
-//	ZHTplusGraph::Edge* theEdge;
-//	ZHTplusGraph::Property* theProperty;
-//
-//	zc->lookup(NodeID, *KVSvalue);
-//	theNode = parseNodeFromString(*KVSvalue);
-//	theEdge = getNodeEdgeSource(theNode, EdgeID);
-//	theProperty = getEdgeProperty(theEdge, PropertyID);
-//	return theProperty->mutable_value();
-//}
+
+// Return the target NodeID of the selected Edge of a Node
+// TODO : Return the lookup status; Accept result as the last parameter
+
+string ZHTplusClient::ZHTplusGraphGetNodeEdgeTarget(string NodeID, string EdgeID) {
+
+	string KVSvalue;
+	ZHTplusGraph::Node theNode;
+	ZHTplusGraph::Edge* theEdge;
+
+	_zc.lookup(NodeID, KVSvalue);
+	theNode = parseNodeFromString(KVSvalue);
+	theEdge = getNodeEdgeSource(theNode, EdgeID);
+	return theEdge->mutable_target()->c_str();
+}
+
+
+// Return selected Property value of an Edge of a Node
+// TODO : Return the lookup status; Accept result as the last parameter
+
+string ZHTplusClient::ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string EdgeID, string PropertyID) {
+
+	string KVSvalue;
+	ZHTplusGraph::Node theNode;
+	ZHTplusGraph::Edge* theEdge;
+	ZHTplusGraph::Property* theProperty;
+
+	_zc.lookup(NodeID, KVSvalue);
+	theNode = parseNodeFromString(KVSvalue);
+	theEdge = getNodeEdgeSource(theNode, EdgeID);
+	theProperty = getEdgeProperty(theEdge, PropertyID);
+	return theProperty->mutable_value()->c_str();
+}
 
 
 // Serialize the node and store the bytes in the returned string.
@@ -282,13 +282,13 @@ bool ZHTplusClient::removeNodeProperty(ZHTplusGraph::Node* node, string property
 
 // Create a new Edge for a Node and set its ID, name, source, and target
 
-ZHTplusGraph::Edge* ZHTplusClient::newNodeEdge(ZHTplusGraph::Node* node1, string node2ID, string ID, string name) {
+ZHTplusGraph::Edge* ZHTplusClient::newNodeEdge(ZHTplusGraph::Node& node1, string node2ID, string ID, string name) {
 
-	ZHTplusGraph::Edge* newEdge = node1->add_edge_source();
+	ZHTplusGraph::Edge* newEdge = node1.add_edge_source();
 
 	newEdge->set_edgeid(ID);
 	newEdge->set_name(name);
-	newEdge->set_source(node1->nodeid());
+	newEdge->set_source(node1.nodeid());
 	newEdge->set_target(node2ID);
 
 	return newEdge;
@@ -297,55 +297,62 @@ ZHTplusGraph::Edge* ZHTplusClient::newNodeEdge(ZHTplusGraph::Node* node1, string
 
 // Return selected source Edge of a Node by index
 
-ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeSource(ZHTplusGraph::Node* node, int index) {
+ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeSource(ZHTplusGraph::Node& node, int index) {
+    ZHTplusGraph::Edge* edge = NULL;
 
-	if (index < node->edge_source_size())
-		return node->mutable_edge_source(index);
-	return NULL;
+	if (index < node.edge_source_size())
+		edge = node.mutable_edge_source(index);
+
+	return edge;
 }
 
 
 // Return selected source Edge of a Node by ID
 
-ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeSource(ZHTplusGraph::Node* node, string edgeID) {
+ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeSource(ZHTplusGraph::Node& node, string edgeID) {
 
-	ZHTplusGraph::Edge* edge = NULL;
+	ZHTplusGraph::Edge* edge_source = NULL;
 
-	int numEdges = node->edge_source_size();
+	int numEdges = node.edge_source_size();
 	for (int i = 0; i < numEdges; i++) {
-		edge = node->mutable_edge_source(i);
+		ZHTplusGraph::Edge* edge = node.mutable_edge_source(i);
 		if (edge->has_edgeid())
 			if(edge->edgeid() == edgeID)
-				return edge;
+				edge_source = edge;
 	}
-	return NULL;
+
+	return edge_source;
 }
 
 
 // Return selected target Edge of a Node by index
 
-ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeTarget(ZHTplusGraph::Node* node, int index) {
+ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeTarget(ZHTplusGraph::Node& node, int index) {
 
-	if (index < node->edge_target_size())
-		return node->mutable_edge_target(index);
-	return NULL;
+    ZHTplusGraph::Edge* edge = NULL;
+
+	if (index < node.edge_target_size())
+		edge = node.mutable_edge_target(index);
+
+	return edge;
 }
 
 
 // Return selected target Edge of a Node by ID
 
-ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeTarget(ZHTplusGraph::Node* node, string edgeID) {
+ZHTplusGraph::Edge* ZHTplusClient::getNodeEdgeTarget(ZHTplusGraph::Node& node, string edgeID) {
 
-	ZHTplusGraph::Edge* edge = NULL;
+	ZHTplusGraph::Edge* edge_target = NULL;
 
-	int numEdges = node->edge_target_size();
+	int numEdges = node.edge_target_size();
 	for (int i = 0; i < numEdges; i++) {
-		edge = node->mutable_edge_target(i);
+		ZHTplusGraph::Edge* edge = node.mutable_edge_target(i);
 		if (edge->has_edgeid())
 			if(edge->edgeid() == edgeID)
-				return edge;
+				edge_target = edge;
 	}
-	return NULL;
+
+	return edge_target;
 }
 
 
