@@ -52,7 +52,7 @@ public:
     int ZHTplusGraphAddNodeEdge(string Node1ID, string Node2ID, string EdgeID, string EdgeName);
     int ZHTplusGraphAddNodeEdgeProperty(string NodeID, string EdgeID, string PropertyID, string PropertyName, string PropertyValue);
 
-    string* ZHTplusGraphGetNodePropertyValue(string NodeID, string PropertyID);
+    string ZHTplusGraphGetNodePropertyValue(string NodeID, string PropertyID);
     string* ZHTplusGraphGetNodeEdgeTarget(string NodeID, string EdgeID);
     string* ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string EdgeID, string PropertyID);
 

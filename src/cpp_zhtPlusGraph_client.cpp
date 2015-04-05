@@ -171,7 +171,7 @@ void test_insert() {
 //	else
 //		printf("ADD NODE EDGE PROPERTY ERR, rc(%d)\n", rc);
 
-    printf("inserting complete !");
+    printf("inserting complete ! \n");
 
 }
 
@@ -179,9 +179,9 @@ void test_lookup() {
 
 	test_insert();
 
-    string* result = zpc.ZHTplusGraphGetNodePropertyValue("12", "2p");
+    string result = zpc.ZHTplusGraphGetNodePropertyValue("12", "2p");
 
-    printf("NodePropertyValue Lookup Result, value={%s}", result->c_str());
+    cout << "NodePropertyValue Lookup Result, value : " << result << "\n";
 
 //	int rc = zc.lookup(key, result);
 //

@@ -122,7 +122,7 @@ int ZHTplusClient::ZHTplusGraphAddNodeProperty(string NodeID, string PropertyID,
 // Return selected Property value of a Node
 // TODO : Return the lookup status; Accept result as the last parameter
 
-string* ZHTplusClient::ZHTplusGraphGetNodePropertyValue(string NodeID, string PropertyID) {
+string ZHTplusClient::ZHTplusGraphGetNodePropertyValue(string NodeID, string PropertyID) {
 
 	string KVSvalue;
 	ZHTplusGraph::Node theNode;
@@ -130,9 +130,10 @@ string* ZHTplusClient::ZHTplusGraphGetNodePropertyValue(string NodeID, string Pr
 
 	_zc.lookup(NodeID, KVSvalue);
 	theNode = parseNodeFromString(KVSvalue);
+
 	theProperty = getNodeProperty(theNode, PropertyID);
 
-	return theProperty->mutable_value();
+	return theProperty->mutable_value()->c_str();
 }
 
 //
