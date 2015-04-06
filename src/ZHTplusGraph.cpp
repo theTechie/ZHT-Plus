@@ -52,10 +52,18 @@ ZHTplusClient::~ZHTplusClient()
 int ZHTplusClient::init(const string& zhtConf, const string& neighborConf)
 {
 
-    return _zc.init(zhtConf, neighborConf);
+//    return _zc.init(zhtConf, neighborConf);
+	_zc.init(zhtConf, neighborConf);
+	_zc.remove("0");
+	_zc.remove("1");
+	_zc.remove("2");
+	_zc.remove("3");
+	_zc.remove("4");
+	_zc.remove("5");
+	_zc.remove("6");
 }
 
-// Create a new node, serialize it, and store it in ZHT
+// If the nodeID does not already exist, create a new node, serialize it, and store it in ZHT
 
 int ZHTplusClient::ZHTplusGraphAddNode(string NodeID, string NodeName)
 {
@@ -64,7 +72,7 @@ int ZHTplusClient::ZHTplusGraphAddNode(string NodeID, string NodeName)
 
     if(isNodeExists(NodeID))
     {
-        cout << "Node Exists : " << NodeID << endl;
+        cout << "Node Exists : '" << NodeID << "'" << endl;
         return 0;
     }
 
@@ -104,10 +112,16 @@ int ZHTplusClient::ZHTplusGraphAddNodeEdge(string Node1ID, string Node2ID, strin
 
     _zc.lookup(Node1ID, KVSvalue);
     theNode = parseNodeFromString(KVSvalue);
-    newEdge = newNodeEdge(theNode, Node2ID, EdgeID, EdgeName);
-    KVSvalue = serializeNodeToString(theNode);
-    _zc.remove(Node1ID);
-    return _zc.insert(Node1ID, KVSvalue);
+	if(getNodeEdgeSource(theNode, EdgeID) == NULL) {
+	    newEdge = newNodeEdge(theNode, Node2ID, EdgeID, EdgeName);
+	    KVSvalue = serializeNodeToString(theNode);
+	    _zc.remove(Node1ID);
+	    return _zc.insert(Node1ID, KVSvalue);
+	}
+	else {
+		cout << "Edge Exists : '" << EdgeID << "'" << endl;
+		return 0;
+	}
 }
 
 
