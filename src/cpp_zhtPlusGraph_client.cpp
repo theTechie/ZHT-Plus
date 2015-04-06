@@ -136,6 +136,8 @@ void loadGraph() {
     std::ifstream infile("../datasets/web-Stanford-test.txt");
     string a, b;
 
+    cout << "Loading Graph..." << endl;
+
     while (infile >> a >> b)
     {
         zpc.ZHTplusGraphAddNode(a, a);
@@ -148,6 +150,10 @@ void loadGraph() {
 
         cout << stream.str() << endl;
     }
+
+    cout << "Graph Loading Completed !" << endl;
+
+    cout << "DFS : " << zpc.ZHTplusGraphDFS("1") << endl;
 }
 
 void test_insert() {

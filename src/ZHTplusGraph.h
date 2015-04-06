@@ -32,12 +32,12 @@
 #define ZHTPLUSGRAPH_H_
 
 #include <stdint.h>
-#include <map>
 #include <string>
+#include <map>
+
 using namespace std;
 
 #include "cpp_zhtclient.h"
-
 #include "ZHTplusGraph.pb.h"
 
 class ZHTplusClient {
@@ -55,6 +55,9 @@ public:
     string ZHTplusGraphGetNodePropertyValue(string NodeID, string PropertyID);
     string ZHTplusGraphGetNodeEdgeTarget(string NodeID, string EdgeID);
     string ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string EdgeID, string PropertyID);
+
+    string ZHTplusGraphDFS(string StartNodeID);
+    string ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> hashtable);
 
     int teardown();
 
@@ -76,6 +79,8 @@ private:
     ZHTplusGraph::Edge* getNodeEdgeSource(ZHTplusGraph::Node& node, string edgeID);
     ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node& node, int index);
     ZHTplusGraph::Edge* getNodeEdgeTarget(ZHTplusGraph::Node& node, string edgeID);
+    string getEdgeTarget(ZHTplusGraph::Edge* edge);
+    int getNodeEdgeSourceCount(ZHTplusGraph::Node& node);
     bool removeNodeEdge(ZHTplusGraph::Node* node, string edgeID);
 
     ZHTplusGraph::Property* newEdgeProperty(ZHTplusGraph::Edge* edge, string ID, string name, string value);

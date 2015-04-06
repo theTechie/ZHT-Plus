@@ -185,6 +185,52 @@ string ZHTplusClient::ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string
     return theProperty->mutable_value()->c_str();
 }
 
+// Mark node visited and recursively visit all nodes pointed to by edges from this node
+
+string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> hashtable) {
+
+    string KVSvalue;
+	ZHTplusGraph::Node theNode;
+	ZHTplusGraph::Edge* edge;
+	int edgeCount;
+	string nodeID;
+
+	if(hashtable[StartNodeID] != "1") {
+		// begin first visit to this node
+		cout << "First visit to node: " << StartNodeID << endl;
+		// end first visit to this node
+		hashtable[StartNodeID] = "1";
+		_zc.lookup(StartNodeID, KVSvalue);
+
+		theNode = parseNodeFromString(KVSvalue);
+		edgeCount = getNodeEdgeSourceCount(theNode);
+
+		for(int i = 0; i < edgeCount; i++) {
+			edge = getNodeEdgeSource(theNode, i);
+			nodeID = getEdgeTarget(edge);
+			// begin processing an edge
+			cout << "Source node: " << StartNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
+			// end processing an edge
+			ZHTplusGraphDFStraverse(nodeID, hashtable);
+		}
+	}
+	else {
+		// begin node already visited
+		cout << "Already visited node: " << StartNodeID << endl;
+		// end node already visitied
+	}
+
+	return StartNodeID;
+}
+
+
+// Set up the hash table and start the recursive traversal
+
+string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID) {
+    map<string, string> hashtable;
+
+	return ZHTplusGraphDFStraverse(StartNodeID, hashtable);
+}
 
 // Serialize the node and store the bytes in the returned string.
 
@@ -459,6 +505,22 @@ bool ZHTplusClient::removeEdgeProperty(ZHTplusGraph::Edge* edge, string property
 // stuff goes here
     return true;
 }
+
+
+// Return the number of source edges the node has
+
+int ZHTplusClient::getNodeEdgeSourceCount(ZHTplusGraph::Node& node) {
+
+	return node.edge_source_size();
+}
+
+// Return the target node ID for an edge
+
+string ZHTplusClient::getEdgeTarget(ZHTplusGraph::Edge* edge) {
+
+	return edge->mutable_target()->c_str();
+}
+
 
 // Teardown ZHT-Clinet
 
