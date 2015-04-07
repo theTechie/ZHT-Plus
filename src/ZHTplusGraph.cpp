@@ -209,8 +209,11 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 	int edgeCount;
 	string nodeID;
 
+
+	cout << "DFS recursion called with node: " << StartNodeID << endl;
 	if(hashtable[StartNodeID] != "1") {
 		// begin first visit to this node
+		DFSnodeCount++;
 		cout << "First visit to node: " << StartNodeID << endl;
 		// end first visit to this node
 		hashtable[StartNodeID] = "1";
@@ -242,8 +245,11 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 
 string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID) {
     map<string, string> hashtable;
-
-	return ZHTplusGraphDFStraverse(StartNodeID, hashtable);
+
+	DFSnodeCount = 0;
+	ZHTplusGraphDFStraverse(StartNodeID, hashtable);
+	printf("Visited %d nodes\n",DFSnodeCount);
+	return StartNodeID;
 }
 
 // Serialize the node and store the bytes in the returned string.

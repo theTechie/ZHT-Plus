@@ -90,6 +90,8 @@ private:
 
 private:
     ZHTClient _zc;
+    int DFSnodeCount;
+    map<string, string> DFShashtable;
 };
 
 #endif /* ZHTPLUSGRAPH_H_ */

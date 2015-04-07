@@ -153,7 +153,7 @@ void loadGraph() {
 
     cout << "Graph Loading Completed !" << endl;
 
-    cout << "DFS : " << zpc.ZHTplusGraphDFS("1") << endl;
+    cout << "DFS : " << zpc.ZHTplusGraphDFS("0") << endl;
 }
 
 void test_insert() {
