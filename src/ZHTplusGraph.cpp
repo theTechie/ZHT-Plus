@@ -201,7 +201,7 @@ string ZHTplusClient::ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string
 
 // Mark node visited and recursively visit all nodes pointed to by edges from this node
 
-string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> hashtable) {
+string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> &hashtable) {
 
     string KVSvalue;
 	ZHTplusGraph::Node theNode;
@@ -244,7 +244,7 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 // Set up the hash table and start the recursive traversal
 
 string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID) {
-    map<string, string> hashtable;
+    std::map<string, string> hashtable;
 
 	DFSnodeCount = 0;
 	ZHTplusGraphDFStraverse(StartNodeID, hashtable);

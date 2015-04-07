@@ -57,7 +57,7 @@ public:
     string ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string EdgeID, string PropertyID);
 
     string ZHTplusGraphDFS(string StartNodeID);
-    string ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> hashtable);
+    string ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> &hashtable);
 
     int teardown();
 
