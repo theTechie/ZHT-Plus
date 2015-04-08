@@ -91,6 +91,7 @@ private:
 private:
     ZHTClient _zc;
     int DFSnodeCount;
+    int DFSnodeVisits;
     map<string, string> DFShashtable;
 };
 

@@ -133,13 +133,27 @@ void printUsage(char *argv_0) {
 
 // Load Graph using the graph dataset stored in file
 void loadGraph() {
-    std::ifstream infile("../datasets/web-Stanford-test.txt");
+    std::ifstream infile("../datasets/web-Stanford.txt");
     string a, b;
+
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[80];
+
+	time (&rawtime);
+	timeinfo = gmtime(&rawtime);
+
+	strftime(buffer,80,"%d-%m-%Y %H:%M:%S",timeinfo);
+	std::string str(buffer);
+
+	cout << str << endl;
 
     cout << "Loading Graph..." << endl;
 
-    while (infile >> a >> b)
+//    while (infile >> a >> b)
+	for(int i = 0; i < 10000; i++)
     {
+    	infile >> a >> b;
         zpc.ZHTplusGraphAddNode(a, a);
         zpc.ZHTplusGraphAddNode(b, b);
 
@@ -148,12 +162,38 @@ void loadGraph() {
 
         zpc.ZHTplusGraphAddNodeEdge(a, b, stream.str(), stream.str());
 
-        cout << stream.str() << endl;
+//        cout << stream.str() << endl;
     }
+
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
+	std::string str1(buffer);
+
+	cout << str1 << endl;
 
     cout << "Graph Loading Completed !" << endl;
 
-    cout << "DFS : " << zpc.ZHTplusGraphDFS("0") << endl;
+    cout << "DFS : " << zpc.ZHTplusGraphDFS("1") << endl;
+
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
+	std::string str2(buffer);
+
+	cout << str2 << endl;
+
+    cout << "DFS : " << zpc.ZHTplusGraphDFS("2") << endl;
+
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
+	std::string str3(buffer);
+
+	cout << str3 << endl;
 }
 
 void test_insert() {

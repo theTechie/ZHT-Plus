@@ -72,7 +72,7 @@ int ZHTplusClient::ZHTplusGraphAddNode(string NodeID, string NodeName)
 
     if(isNodeExists(NodeID))
     {
-        cout << "Node Exists : '" << NodeID << "'" << endl;
+//        cout << "Node Exists : '" << NodeID << "'" << endl;
         return 0;
     }
 
@@ -119,7 +119,7 @@ int ZHTplusClient::ZHTplusGraphAddNodeEdge(string Node1ID, string Node2ID, strin
 	    return _zc.insert(Node1ID, KVSvalue);
 	}
 	else {
-		cout << "Edge Exists : '" << EdgeID << "'" << endl;
+//		cout << "Edge Exists : '" << EdgeID << "'" << endl;
 		return 0;
 	}
 }
@@ -210,11 +210,12 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 	string nodeID;
 
 
-	cout << "DFS recursion called with node: " << StartNodeID << endl;
+//	cout << "DFS recursion called with node: " << StartNodeID << endl;
+	DFSnodeVisits++;
 	if(hashtable[StartNodeID] != "1") {
 		// begin first visit to this node
 		DFSnodeCount++;
-		cout << "First visit to node: " << StartNodeID << endl;
+//		cout << "First visit to node: " << StartNodeID << endl;
 		// end first visit to this node
 		hashtable[StartNodeID] = "1";
 		_zc.lookup(StartNodeID, KVSvalue);
@@ -226,14 +227,14 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 			edge = getNodeEdgeSource(theNode, i);
 			nodeID = getEdgeTarget(edge);
 			// begin processing an edge
-			cout << "Source node: " << StartNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
+//			cout << "Source node: " << StartNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
 			// end processing an edge
 			ZHTplusGraphDFStraverse(nodeID, hashtable);
 		}
 	}
 	else {
 		// begin node already visited
-		cout << "Already visited node: " << StartNodeID << endl;
+//		cout << "Already visited node: " << StartNodeID << endl;
 		// end node already visitied
 	}
 
@@ -247,8 +248,10 @@ string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID) {
     std::map<string, string> hashtable;
 
 	DFSnodeCount = 0;
+	DFSnodeVisits = 0;
 	ZHTplusGraphDFStraverse(StartNodeID, hashtable);
-	printf("Visited %d nodes\n",DFSnodeCount);
+	printf("Visited %d nodes\n",DFSnodeVisits);
+	printf("Visited %d unique nodes\n",DFSnodeCount);
 	return StartNodeID;
 }
 
