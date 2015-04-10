@@ -54,13 +54,6 @@ int ZHTplusClient::init(const string& zhtConf, const string& neighborConf)
 
 //    return _zc.init(zhtConf, neighborConf);
 	_zc.init(zhtConf, neighborConf);
-	_zc.remove("0");
-	_zc.remove("1");
-	_zc.remove("2");
-	_zc.remove("3");
-	_zc.remove("4");
-	_zc.remove("5");
-	_zc.remove("6");
 }
 
 // If the nodeID does not already exist, create a new node, serialize it, and store it in ZHT
