@@ -139,6 +139,8 @@ int benchmarkAppend() {
 	start = TimeUtil::getTime_msec();
 	int errCount = 0;
 
+    cout << "Starting Append...." << endl;
+
 	int c = 0;
 	for (it = pkgList_append.begin(); it != pkgList_append.end(); it++) {
 
@@ -149,7 +151,11 @@ int benchmarkAppend() {
 		ZHTplusGraph::Node node;
 		node.ParseFromString(pkg_str);
 
+        cout << "Append -> Node ID: " << node.nodeid() << endl;
+
 		int ret = zpc.ZHTplusGraphAddNodeProperty(node.nodeid(), node.nodeid(), HashUtil::randomString(valLen).c_str(), HashUtil::randomString(valLen).c_str());
+
+        cout << "Append Status : " << ret << endl;
 
 		if (ret < 0) {
 			errCount++;
@@ -185,7 +191,11 @@ float benchmarkLookup() {
 
 		node.ParseFromString(pkg_str);
 
-		zpc.ZHTplusGraphGetNodePropertyValue(node.nodeid(), node.nodeid());
+		cout << "Lookup -> Node ID: " << node.nodeid() << endl;
+
+		string propertyValue = zpc.ZHTplusGraphGetNodePropertyValue(node.nodeid(), node.nodeid());
+
+		cout << "Lookup -> " << "Property Value: " << propertyValue << endl;
 		//cout << "Found result: "<< result << endl;
 //		if (ret < 0) {
 //			errCount++;
