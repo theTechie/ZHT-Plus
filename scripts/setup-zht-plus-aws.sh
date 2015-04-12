@@ -38,5 +38,5 @@ done
 # Start ZHT server at remote node
 for i in $IP_LIST; do
 	echo "connect to $i and start zhtserver"
-        parallel-ssh -H $i -x "-oStrictHostKeyChecking=no -i $PRIVATE_KEY" ./start-server.sh&
+        parallel-ssh -H $i -x "-oStrictHostKeyChecking=no -i $PRIVATE_KEY" "nohup ./start-server.sh > log.out 2> log.err < /dev/null &"
 done
