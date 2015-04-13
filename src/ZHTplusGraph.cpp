@@ -243,10 +243,71 @@ string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID) {
 	DFSnodeCount = 0;
 	DFSnodeVisits = 0;
 	ZHTplusGraphDFStraverse(StartNodeID, hashtable);
-	printf("Visited %d nodes\n",DFSnodeVisits);
-	printf("Visited %d unique nodes\n",DFSnodeCount);
+	printf("DFS Visited %d nodes\n",DFSnodeVisits);
+	printf("DFS Visited %d unique nodes\n",DFSnodeCount);
 	return StartNodeID;
 }
+
+
+// Mark node visited and continue visiting all nodes in the queue
+
+string ZHTplusClient::ZHTplusGraphBFStraverse(queue<string> Q, map<string, string> &hashtable) {
+
+    string KVSvalue;
+	string StartNodeID;
+	string thisNodeID;
+	ZHTplusGraph::Node thisNode;
+	ZHTplusGraph::Edge* edge;
+	int edgeCount;
+	string nodeID;
+
+
+	StartNodeID = Q.front();
+//	cout << "BFS traverse called with node: " << StartNodeID << endl;
+	while(!(Q.empty())) {
+		thisNodeID = Q.front();
+		Q.pop();
+		BFSnodeVisits++;
+		if(hashtable[thisNodeID] != "1") {
+			// begin first visit to this node
+			BFSnodeCount++;
+//			cout << "First visit to node: " << thisNodeID << endl;
+			// end first visit to this node
+			hashtable[thisNodeID] = "1";
+			_zc.lookup(thisNodeID, KVSvalue);
+
+			thisNode = parseNodeFromString(KVSvalue);
+			edgeCount = getNodeEdgeSourceCount(thisNode);
+
+			for(int i = 0; i < edgeCount; i++) {
+				edge = getNodeEdgeSource(thisNode, i);
+				nodeID = getEdgeTarget(edge);
+				// begin processing an edge
+//				cout << "Source node: " << thisNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
+				Q.push(nodeID);
+				// end processing an edge
+			}
+		}
+	}
+	return StartNodeID;
+}
+
+
+// Set up the hash table and queue and start the traversal
+
+string ZHTplusClient::ZHTplusGraphBFS(string StartNodeID) {
+    std::map<string, string> hashtable;
+    queue<string> Q;
+
+	BFSnodeCount = 0;
+	BFSnodeVisits = 0;
+	Q.push(StartNodeID);
+	ZHTplusGraphBFStraverse(Q, hashtable);
+	printf("BFS Visited %d nodes\n",BFSnodeVisits);
+	printf("BFS Visited %d unique nodes\n",BFSnodeCount);
+	return StartNodeID;
+}
+
 
 // Serialize the node and store the bytes in the returned string.
 

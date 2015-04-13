@@ -151,7 +151,7 @@ void loadGraph() {
     cout << "Loading Graph..." << endl;
 
 //    while (infile >> a >> b)
-	for(int i = 0; i < 10000; i++)
+	for(int i = 0; i < 1000; i++)
     {
     	infile >> a >> b;
         zpc.ZHTplusGraphAddNode(a, a);
@@ -175,7 +175,7 @@ void loadGraph() {
 
     cout << "Graph Loading Completed !" << endl;
 
-    cout << "DFS : " << zpc.ZHTplusGraphDFS("1") << endl;
+    cout << "DFS : " << zpc.ZHTplusGraphDFS("2") << endl;
 
 	time (&rawtime);
 	timeinfo = localtime(&rawtime);
@@ -185,7 +185,7 @@ void loadGraph() {
 
 	cout << str2 << endl;
 
-    cout << "DFS : " << zpc.ZHTplusGraphDFS("2") << endl;
+    cout << "BFS : " << zpc.ZHTplusGraphBFS("2") << endl;
 
 	time (&rawtime);
 	timeinfo = localtime(&rawtime);

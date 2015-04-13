@@ -39,6 +39,7 @@ using namespace std;
 
 #include "cpp_zhtclient.h"
 #include "ZHTplusGraph.pb.h"
+#include <queue>
 
 class ZHTplusClient {
 
@@ -58,6 +59,9 @@ public:
 
     string ZHTplusGraphDFS(string StartNodeID);
     string ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> &hashtable);
+
+    string ZHTplusGraphBFS(string StartNodeID);
+    string ZHTplusGraphBFStraverse(queue<string> Q, map<string, string> &hashtable);
 
     int teardown();
 
@@ -90,9 +94,12 @@ private:
 
 private:
     ZHTClient _zc;
+
     int DFSnodeCount;
     int DFSnodeVisits;
-    map<string, string> DFShashtable;
+
+    int BFSnodeCount;
+    int BFSnodeVisits;
 };
 
 #endif /* ZHTPLUSGRAPH_H_ */
