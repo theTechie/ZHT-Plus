@@ -28,18 +28,28 @@
  *      Contributor: Benjamin Miwa, Anirudh Sunkineni
  */
 
-#include "cpp_zhtclient.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <sstream>
+#include <exception>
+
+#include <vector>
+#include <error.h>
+#include <getopt.h>
+#include <unistd.h>
+
 #include "ZHTplusGraph.pb.h"
 #include "ZHTplusGraph.h"
+#include "Util.h"
 
-#include  <getopt.h>
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <fstream>
-#include  <sstream>
-#include  <string>
-#include  <exception>
+#include "cpp_zhtclient.h"
+#include "ZHTUtil.h"
+
 using namespace std;
+using namespace iit::datasys::zht::dm;
+using namespace iit::datasys::zht::graph;
 
 void test_insert();
 void test_lookup();
@@ -136,23 +146,16 @@ void loadGraph() {
     std::ifstream infile("../datasets/web-Stanford.txt");
     string a, b;
 
-	time_t rawtime;
-	struct tm * timeinfo;
+	double start = 0;
+	double end = 0;
+	start = TimeUtil::getTime_msec();
 	char buffer[80];
-
-	time (&rawtime);
-	timeinfo = gmtime(&rawtime);
-
-	strftime(buffer,80,"%d-%m-%Y %H:%M:%S",timeinfo);
-	std::string str(buffer);
-
-	cout << str << endl;
 
     cout << "Loading Graph..." << endl;
 
-//    while (infile >> a >> b)
-	for(int i = 0; i < 1000; i++)
-    {
+    //while (infile >> a >> b) {
+	for(int i = 0; i < 5000; i++) {
+
     	infile >> a >> b;
         zpc.ZHTplusGraphAddNode(a, a);
         zpc.ZHTplusGraphAddNode(b, b);
@@ -162,38 +165,31 @@ void loadGraph() {
 
         zpc.ZHTplusGraphAddNodeEdge(a, b, stream.str(), stream.str());
 
-//        cout << stream.str() << endl;
+    //cout << stream.str() << endl;
     }
 
-	time (&rawtime);
-	timeinfo = localtime(&rawtime);
 
-	strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
-	std::string str1(buffer);
+    end = TimeUtil::getTime_msec();
 
-	cout << str1 << endl;
+    cout << "Graph Loading Completed ! Time in (ms) => " << end - start << endl;
 
-    cout << "Graph Loading Completed !" << endl;
+
+    start = TimeUtil::getTime_msec();
 
     cout << "DFS : " << zpc.ZHTplusGraphDFS("2") << endl;
 
-	time (&rawtime);
-	timeinfo = localtime(&rawtime);
+    end = TimeUtil::getTime_msec();
 
-	strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
-	std::string str2(buffer);
+	cout << "DFS Completed ! Time in (ms) => " << end - start << endl;
 
-	cout << str2 << endl;
+
+    start = TimeUtil::getTime_msec();
 
     cout << "BFS : " << zpc.ZHTplusGraphBFS("2") << endl;
 
-	time (&rawtime);
-	timeinfo = localtime(&rawtime);
+    end = TimeUtil::getTime_msec();
 
-	strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
-	std::string str3(buffer);
-
-	cout << str3 << endl;
+    cout << "BFS Completed ! Time in (ms) => " << end - start << endl;
 }
 
 void test_insert() {
