@@ -146,15 +146,15 @@ void loadGraph() {
     std::ifstream infile("../datasets/web-Stanford.txt");
     string a, b;
 
-	double start = 0;
-	double end = 0;
-	start = TimeUtil::getTime_msec();
-	char buffer[80];
+    double start = 0;
+    double end = 0;
+    start = TimeUtil::getTime_msec();
+    char buffer[80];
 
     cout << "Loading Graph..." << endl;
 
     //while (infile >> a >> b) {
-	for(int i = 0; i < 5000; i++) {
+    for(int i = 0; i < 10000; i++) {
 
     	infile >> a >> b;
         zpc.ZHTplusGraphAddNode(a, a);
@@ -173,23 +173,29 @@ void loadGraph() {
 
     cout << "Graph Loading Completed ! Time in (ms) => " << end - start << endl;
 
+    for(int i = 1; i < 6; i++) {
+ 
+    	stringstream num;
+    	num << i;
 
-    start = TimeUtil::getTime_msec();
+    	start = TimeUtil::getTime_msec();
 
-    cout << "DFS : " << zpc.ZHTplusGraphDFS("2") << endl;
+    	cout << "DFS : " << zpc.ZHTplusGraphDFS(num.str().c_str()) << endl;
 
-    end = TimeUtil::getTime_msec();
+    	end = TimeUtil::getTime_msec();
 
-	cout << "DFS Completed ! Time in (ms) => " << end - start << endl;
+    	cout << "DFS Completed ! Time in (ms) => " << end - start << endl;
 
 
-    start = TimeUtil::getTime_msec();
+    	start = TimeUtil::getTime_msec();
 
-    cout << "BFS : " << zpc.ZHTplusGraphBFS("2") << endl;
+    	cout << "BFS : " << zpc.ZHTplusGraphBFS(num.str().c_str()) << endl;
 
-    end = TimeUtil::getTime_msec();
+    	end = TimeUtil::getTime_msec();
 
-    cout << "BFS Completed ! Time in (ms) => " << end - start << endl;
+    	cout << "BFS Completed ! Time in (ms) => " << end - start << endl;
+
+    }
 }
 
 void test_insert() {
