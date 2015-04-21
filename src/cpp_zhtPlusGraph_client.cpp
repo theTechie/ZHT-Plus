@@ -154,7 +154,7 @@ void loadGraph() {
     cout << "Loading Graph..." << endl;
 
     //while (infile >> a >> b) {
-    for(int i = 0; i < 10000; i++) {
+    for(int i = 0; i < 100000; i++) {
 
     	infile >> a >> b;
         zpc.ZHTplusGraphAddNode(a, a);
@@ -174,26 +174,35 @@ void loadGraph() {
     cout << "Graph Loading Completed ! Time in (ms) => " << end - start << endl;
 
     for(int i = 1; i < 6; i++) {
- 
+
     	stringstream num;
     	num << i;
 
-    	start = TimeUtil::getTime_msec();
+ //   	start = TimeUtil::getTime_msec();
 
-    	cout << "DFS : " << zpc.ZHTplusGraphDFS(num.str().c_str()) << endl;
+ //   	cout << "DFS : " << zpc.ZHTplusGraphDFS(num.str().c_str()) << endl;
 
-    	end = TimeUtil::getTime_msec();
+ //   	end = TimeUtil::getTime_msec();
 
-    	cout << "DFS Completed ! Time in (ms) => " << end - start << endl;
+ //   	cout << "DFS Completed ! Time in (ms) => " << end - start << endl;
 
 
-    	start = TimeUtil::getTime_msec();
+ //   	start = TimeUtil::getTime_msec();
 
-    	cout << "BFS : " << zpc.ZHTplusGraphBFS(num.str().c_str()) << endl;
+ //   	cout << "BFS : " << zpc.ZHTplusGraphBFS(num.str().c_str()) << endl;
 
-    	end = TimeUtil::getTime_msec();
+ //   	end = TimeUtil::getTime_msec();
 
-    	cout << "BFS Completed ! Time in (ms) => " << end - start << endl;
+ //   	cout << "BFS Completed ! Time in (ms) => " << end - start << endl;
+
+
+	   	start = TimeUtil::getTime_msec();
+
+	   	cout << "PageRank : " << zpc.ZHTplusGraphPageRank(num.str().c_str(), 20) << endl;
+
+	   	end = TimeUtil::getTime_msec();
+
+	   	cout << "PageRank Completed ! Time in (ms) => " << end - start << endl;
 
     }
 }

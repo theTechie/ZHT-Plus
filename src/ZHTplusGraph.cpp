@@ -194,7 +194,8 @@ string ZHTplusClient::ZHTplusGraphGetNodeEdgePropertyValue(string NodeID, string
 
 // Mark node visited and recursively visit all nodes pointed to by edges from this node
 
-string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> &hashtable) {
+string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, string> &hashtable)
+{
 
     string KVSvalue;
 	ZHTplusGraph::Node theNode;
@@ -237,7 +238,8 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 
 // Set up the hash table and start the recursive traversal
 
-string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID) {
+string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID)
+{
     std::map<string, string> hashtable;
 
 	DFSnodeCount = 0;
@@ -251,7 +253,8 @@ string ZHTplusClient::ZHTplusGraphDFS(string StartNodeID) {
 
 // Mark node visited and continue visiting all nodes in the queue
 
-string ZHTplusClient::ZHTplusGraphBFStraverse(queue<string> Q, map<string, string> &hashtable) {
+string ZHTplusClient::ZHTplusGraphBFStraverse(queue<string> Q, map<string, string> &hashtable)
+{
 
     string KVSvalue;
 	string StartNodeID;
@@ -295,7 +298,9 @@ string ZHTplusClient::ZHTplusGraphBFStraverse(queue<string> Q, map<string, strin
 
 // Set up the hash table and queue and start the traversal
 
-string ZHTplusClient::ZHTplusGraphBFS(string StartNodeID) {
+string ZHTplusClient::ZHTplusGraphBFS(string StartNodeID)
+{
+
     std::map<string, string> hashtable;
     queue<string> Q;
 
@@ -305,6 +310,107 @@ string ZHTplusClient::ZHTplusGraphBFS(string StartNodeID) {
 	ZHTplusGraphBFStraverse(Q, hashtable);
 	printf("BFS Visited %d nodes\n",BFSnodeVisits);
 	printf("BFS Visited %d unique nodes\n",BFSnodeCount);
+	return StartNodeID;
+}
+
+
+// Mark node visited, increment its count, and continue visiting all nodes in the queue
+
+string ZHTplusClient::ZHTplusGraphPageRanktraverse(queue<string> Q, map<string, string> &hashtable, map<string, int> &pagecounts)
+{
+
+    string KVSvalue;
+	string StartNodeID;
+	string thisNodeID;
+	ZHTplusGraph::Node thisNode;
+	ZHTplusGraph::Edge* edge;
+	int edgeCount;
+	string nodeID;
+
+
+	StartNodeID = Q.front();
+//	cout << "BFS traverse called with node: " << StartNodeID << endl;
+	while(!(Q.empty())) {
+		thisNodeID = Q.front();
+		Q.pop();
+		PRnodeVisits++;
+		if(hashtable[thisNodeID] != "1") {
+			// begin first visit to this node
+			PRnodeCount++;
+			pagecounts[thisNodeID] = 1;
+//			cout << "First visit to node: " << thisNodeID << endl;
+			// end first visit to this node
+			hashtable[thisNodeID] = "1";
+			_zc.lookup(thisNodeID, KVSvalue);
+
+			thisNode = parseNodeFromString(KVSvalue);
+			edgeCount = getNodeEdgeSourceCount(thisNode);
+
+			for(int i = 0; i < edgeCount; i++) {
+				edge = getNodeEdgeSource(thisNode, i);
+				nodeID = getEdgeTarget(edge);
+				// begin processing an edge
+				Q.push(nodeID);
+//				cout << "Source node: " << thisNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
+				// end processing an edge
+			}
+		}
+		else
+			// begin subsequent visit to this node
+			pagecounts[thisNodeID] = pagecounts[thisNodeID] + 1;
+//			cout << "Subsequent visit to node: " << thisNodeID << endl;
+			// end subsequent visit to this node
+
+	}
+	return StartNodeID;
+}
+
+
+// Set up the hash table, pagecounts, and queue, start the traversal, then collect top N pages
+
+string ZHTplusClient::ZHTplusGraphPageRank(string StartNodeID, int ShowTopN)
+{
+
+    std::map<string, string> hashtable;
+    std::map<string, int> pagecounts;
+    std::map<string, int>::iterator it_pagecount;
+    queue<string> Q;
+    nodecount TopN[ShowTopN];
+	int i, t_int;
+	string t_string;
+
+	PRnodeCount = 0;
+	PRnodeVisits = 0;
+	for(i=0;i<ShowTopN;i++) {
+		TopN[i].node = "Unused";
+		TopN[i].count = 0;
+	}
+	Q.push(StartNodeID);
+	ZHTplusGraphPageRanktraverse(Q, hashtable, pagecounts);
+	printf("PageRank Visited %d nodes\n",PRnodeVisits);
+	printf("PageRank Visited %d unique nodes\n",PRnodeCount);
+	// Iterate through the pagecounts map
+	for(it_pagecount = pagecounts.begin(); it_pagecount != pagecounts.end(); it_pagecount++) {
+		if(it_pagecount->second > TopN[0].count) {
+			// New Top N
+			TopN[0].node = it_pagecount->first;
+			TopN[0].count = it_pagecount->second;
+			i = 1;
+			// swap it up into the correct position
+			while((i < ShowTopN) && (TopN[i-1].count > TopN[i].count)) {
+				t_string = TopN[i].node;
+				TopN[i].node = TopN[i-1].node;
+				TopN[i-1].node = t_string;
+				t_int = TopN[i].count;
+				TopN[i].count = TopN[i-1].count;
+				TopN[i-1].count = t_int;
+				i++;
+			}
+		}
+	}
+	for(int i = ShowTopN; i > 0; i--) {
+		printf("Node %s pointed to by %d other nodes\n", TopN[i-1].node.c_str(), TopN[i-1].count);
+	}
 	return StartNodeID;
 }
 

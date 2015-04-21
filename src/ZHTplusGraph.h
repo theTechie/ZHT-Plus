@@ -41,6 +41,12 @@ using namespace std;
 #include "ZHTplusGraph.pb.h"
 #include <queue>
 
+struct nodecount {
+	int	count;
+	string node;
+};
+
+
 class ZHTplusClient {
 
 public:
@@ -62,6 +68,9 @@ public:
 
     string ZHTplusGraphBFS(string StartNodeID);
     string ZHTplusGraphBFStraverse(queue<string> Q, map<string, string> &hashtable);
+
+    string ZHTplusGraphPageRank(string StartNodeID, int ShowTopN);
+	string ZHTplusGraphPageRanktraverse(queue<string> Q, map<string, string> &hashtable, map<string, int> &pagecounts);
 
     int teardown();
 
@@ -100,6 +109,10 @@ private:
 
     int BFSnodeCount;
     int BFSnodeVisits;
+
+    int PRnodeCount;
+    int PRnodeVisits;
+
 };
 
 #endif /* ZHTPLUSGRAPH_H_ */
