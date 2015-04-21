@@ -154,7 +154,7 @@ void loadGraph() {
     cout << "Loading Graph..." << endl;
 
     //while (infile >> a >> b) {
-    for(int i = 0; i < 100000; i++) {
+    for(int i = 0; i < 1; i++) {
 
     	infile >> a >> b;
         zpc.ZHTplusGraphAddNode(a, a);
@@ -173,7 +173,7 @@ void loadGraph() {
 
     cout << "Graph Loading Completed ! Time in (ms) => " << end - start << endl;
 
-    for(int i = 1; i < 6; i++) {
+    for(int i = 5; i < 6; i++) {
 
     	stringstream num;
     	num << i;

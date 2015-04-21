@@ -204,13 +204,9 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 	string nodeID;
 
 
-//	cout << "DFS recursion called with node: " << StartNodeID << endl;
 	DFSnodeVisits++;
 	if(hashtable[StartNodeID] != "1") {
-		// begin first visit to this node
 		DFSnodeCount++;
-//		cout << "First visit to node: " << StartNodeID << endl;
-		// end first visit to this node
 		hashtable[StartNodeID] = "1";
 		_zc.lookup(StartNodeID, KVSvalue);
 
@@ -220,18 +216,9 @@ string ZHTplusClient::ZHTplusGraphDFStraverse(string StartNodeID, map<string, st
 		for(int i = 0; i < edgeCount; i++) {
 			edge = getNodeEdgeSource(theNode, i);
 			nodeID = getEdgeTarget(edge);
-			// begin processing an edge
-//			cout << "Source node: " << StartNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
-			// end processing an edge
 			ZHTplusGraphDFStraverse(nodeID, hashtable);
 		}
 	}
-	else {
-		// begin node already visited
-//		cout << "Already visited node: " << StartNodeID << endl;
-		// end node already visitied
-	}
-
 	return StartNodeID;
 }
 
@@ -266,16 +253,12 @@ string ZHTplusClient::ZHTplusGraphBFStraverse(queue<string> Q, map<string, strin
 
 
 	StartNodeID = Q.front();
-//	cout << "BFS traverse called with node: " << StartNodeID << endl;
 	while(!(Q.empty())) {
 		thisNodeID = Q.front();
 		Q.pop();
 		BFSnodeVisits++;
 		if(hashtable[thisNodeID] != "1") {
-			// begin first visit to this node
 			BFSnodeCount++;
-//			cout << "First visit to node: " << thisNodeID << endl;
-			// end first visit to this node
 			hashtable[thisNodeID] = "1";
 			_zc.lookup(thisNodeID, KVSvalue);
 
@@ -285,10 +268,7 @@ string ZHTplusClient::ZHTplusGraphBFStraverse(queue<string> Q, map<string, strin
 			for(int i = 0; i < edgeCount; i++) {
 				edge = getNodeEdgeSource(thisNode, i);
 				nodeID = getEdgeTarget(edge);
-				// begin processing an edge
-//				cout << "Source node: " << thisNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
 				Q.push(nodeID);
-				// end processing an edge
 			}
 		}
 	}
@@ -314,9 +294,9 @@ string ZHTplusClient::ZHTplusGraphBFS(string StartNodeID)
 }
 
 
-// Mark node visited, increment its count, and continue visiting all nodes in the queue
+// Mark node visited, set its count to 1, and continue visiting all nodes in the queue
 
-string ZHTplusClient::ZHTplusGraphPageRanktraverse(queue<string> Q, map<string, string> &hashtable, map<string, int> &pagecounts)
+string ZHTplusClient::ZHTplusGraphPageRankTraverse(queue<string> Q, map<string, string> &hashtable, map<string, float> &pagecounts)
 {
 
     string KVSvalue;
@@ -326,41 +306,74 @@ string ZHTplusClient::ZHTplusGraphPageRanktraverse(queue<string> Q, map<string, 
 	ZHTplusGraph::Edge* edge;
 	int edgeCount;
 	string nodeID;
-
+	float thisPageCount;
 
 	StartNodeID = Q.front();
-//	cout << "BFS traverse called with node: " << StartNodeID << endl;
 	while(!(Q.empty())) {
 		thisNodeID = Q.front();
 		Q.pop();
 		PRnodeVisits++;
 		if(hashtable[thisNodeID] != "1") {
-			// begin first visit to this node
 			PRnodeCount++;
 			pagecounts[thisNodeID] = 1;
-//			cout << "First visit to node: " << thisNodeID << endl;
-			// end first visit to this node
 			hashtable[thisNodeID] = "1";
 			_zc.lookup(thisNodeID, KVSvalue);
 
 			thisNode = parseNodeFromString(KVSvalue);
 			edgeCount = getNodeEdgeSourceCount(thisNode);
-
 			for(int i = 0; i < edgeCount; i++) {
 				edge = getNodeEdgeSource(thisNode, i);
 				nodeID = getEdgeTarget(edge);
-				// begin processing an edge
 				Q.push(nodeID);
-//				cout << "Source node: " << thisNodeID << " , has edge: " << edge->mutable_edgeid()->c_str() << ", to Target node: " << nodeID << endl;
-				// end processing an edge
 			}
 		}
-		else
-			// begin subsequent visit to this node
-			pagecounts[thisNodeID] = pagecounts[thisNodeID] + 1;
-//			cout << "Subsequent visit to node: " << thisNodeID << endl;
-			// end subsequent visit to this node
+	}
+	return StartNodeID;
+}
 
+
+// Mark node visited, distribute its count nodes it point to, and continue visiting all nodes in the queue
+
+string ZHTplusClient::ZHTplusGraphPageRankCalculate(queue<string> Q, map<string, string> &hashtable, map<string, float> &pagecounts)
+{
+
+    string KVSvalue;
+	string StartNodeID;
+	string thisNodeID;
+	ZHTplusGraph::Node thisNode;
+	ZHTplusGraph::Edge* edge;
+	int edgeCount;
+	string nodeID;
+	float thisPageCount;
+    std::map<string, float> prev_pagecounts;
+    std::map<string, float>::iterator it_pagecount;
+
+	// Save the current pagecounts and reset to 0
+	for(it_pagecount = pagecounts.begin(); it_pagecount != pagecounts.end(); it_pagecount++) {
+		prev_pagecounts[it_pagecount->first] = it_pagecount->second;
+		pagecounts[it_pagecount->first] = 0;
+		hashtable[it_pagecount->first] = '0';
+	}
+	PRdistributed = 0;
+	StartNodeID = Q.front();
+	while(!(Q.empty())) {
+		thisNodeID = Q.front();
+		Q.pop();
+		if(hashtable[thisNodeID] != "1") {
+			hashtable[thisNodeID] = "1";
+			_zc.lookup(thisNodeID, KVSvalue);
+			thisPageCount = prev_pagecounts[thisNodeID];
+			thisNode = parseNodeFromString(KVSvalue);
+			edgeCount = getNodeEdgeSourceCount(thisNode);
+			if(edgeCount > 0)
+			    PRdistributed += thisPageCount;
+			for(int i = 0; i < edgeCount; i++) {
+				edge = getNodeEdgeSource(thisNode, i);
+				nodeID = getEdgeTarget(edge);
+				Q.push(nodeID);
+				pagecounts[nodeID] += thisPageCount / edgeCount;
+			}
+		}
 	}
 	return StartNodeID;
 }
@@ -372,25 +385,44 @@ string ZHTplusClient::ZHTplusGraphPageRank(string StartNodeID, int ShowTopN)
 {
 
     std::map<string, string> hashtable;
-    std::map<string, int> pagecounts;
-    std::map<string, int>::iterator it_pagecount;
+    std::map<string, float> pagecounts;
     queue<string> Q;
-    nodecount TopN[ShowTopN];
-	int i, t_int;
-	string t_string;
+    int i;
 
 	PRnodeCount = 0;
 	PRnodeVisits = 0;
+	Q.push(StartNodeID);
+	ZHTplusGraphPageRankTraverse(Q, hashtable, pagecounts);
+	printf("PageRank Visited %d nodes\n",PRnodeVisits);
+	printf("PageRank Visited %d unique nodes\n",PRnodeCount);
+
+	for(i=0; i < 10; i++){
+		printf("\nRunning PageRank pass %d\n", i+1);
+		ZHTplusGraphPageRankCalculate(Q, hashtable, pagecounts);
+		ZHTplusGraphPageRankShowTopN(pagecounts, ShowTopN);
+	}
+	return StartNodeID;
+}
+
+
+// Search the pagecounts map for the top N and show them in descending order.
+
+int ZHTplusClient::ZHTplusGraphPageRankShowTopN(map<string, float> &pagecounts, int ShowTopN)
+{
+    std::map<string, float>::iterator it_pagecount;
+    nodecount TopN[ShowTopN];
+	int i;
+	float t_float;
+	float PRtotal = 0;
+	string t_string;
+
 	for(i=0;i<ShowTopN;i++) {
 		TopN[i].node = "Unused";
 		TopN[i].count = 0;
 	}
-	Q.push(StartNodeID);
-	ZHTplusGraphPageRanktraverse(Q, hashtable, pagecounts);
-	printf("PageRank Visited %d nodes\n",PRnodeVisits);
-	printf("PageRank Visited %d unique nodes\n",PRnodeCount);
 	// Iterate through the pagecounts map
 	for(it_pagecount = pagecounts.begin(); it_pagecount != pagecounts.end(); it_pagecount++) {
+		PRtotal += it_pagecount->second;
 		if(it_pagecount->second > TopN[0].count) {
 			// New Top N
 			TopN[0].node = it_pagecount->first;
@@ -401,17 +433,16 @@ string ZHTplusClient::ZHTplusGraphPageRank(string StartNodeID, int ShowTopN)
 				t_string = TopN[i].node;
 				TopN[i].node = TopN[i-1].node;
 				TopN[i-1].node = t_string;
-				t_int = TopN[i].count;
+				t_float = TopN[i].count;
 				TopN[i].count = TopN[i-1].count;
-				TopN[i-1].count = t_int;
+				TopN[i-1].count = t_float;
 				i++;
 			}
 		}
 	}
-	for(int i = ShowTopN; i > 0; i--) {
-		printf("Node %s pointed to by %d other nodes\n", TopN[i-1].node.c_str(), TopN[i-1].count);
-	}
-	return StartNodeID;
+	for(i = ShowTopN; i > 0; i--)
+		printf("Node %s has PageRank %12.10f\n", TopN[i-1].node.c_str(), TopN[i-1].count/PRdistributed);
+	return 0;
 }
 
 

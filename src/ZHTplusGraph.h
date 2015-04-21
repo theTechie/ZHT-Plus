@@ -42,7 +42,7 @@ using namespace std;
 #include <queue>
 
 struct nodecount {
-	int	count;
+	float	count;
 	string node;
 };
 
@@ -70,7 +70,8 @@ public:
     string ZHTplusGraphBFStraverse(queue<string> Q, map<string, string> &hashtable);
 
     string ZHTplusGraphPageRank(string StartNodeID, int ShowTopN);
-	string ZHTplusGraphPageRanktraverse(queue<string> Q, map<string, string> &hashtable, map<string, int> &pagecounts);
+	string ZHTplusGraphPageRankTraverse(queue<string> Q, map<string, string> &hashtable, map<string, float> &pagecounts);
+	string ZHTplusGraphPageRankCalculate(queue<string> Q, map<string, string> &hashtable, map<string, float> &pagecounts);
 
     int teardown();
 
@@ -101,6 +102,8 @@ private:
     ZHTplusGraph::Property* getEdgeProperty(ZHTplusGraph::Edge* edge, string propertyID);
     bool removeEdgeProperty(ZHTplusGraph::Edge* edge, string propertyID);
 
+	int ZHTplusGraphPageRankShowTopN(map<string, float> &pagecounts, int ShowTopN);
+
 private:
     ZHTClient _zc;
 
@@ -112,6 +115,7 @@ private:
 
     int PRnodeCount;
     int PRnodeVisits;
+    float PRdistributed;
 
 };
 
