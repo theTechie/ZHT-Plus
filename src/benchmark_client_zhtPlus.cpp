@@ -62,27 +62,11 @@ void init_packages() {
 		node.set_nodeid(HashUtil::randomString(keyLen));
 		node.set_name(HashUtil::randomString(valLen));
 
-		//package.set_virtualpath(HashUtil::randomString(lenString)); //as key
-		//package.set_isdir(true);
-		//package.set_opcode();
-
-		//package.set_replicanum(5); //orginal--Note: never let it be nagative!!!
-
-		/*
-		package.set_realfullpath(
-				"Some-Real-longer-longer-and-longer-Paths--------");
-		package.add_listitem("item-----1");
-		package.add_listitem("item-----2");
-		package.add_listitem("item-----3");
-		package.add_listitem("item-----4");
-		package.add_listitem("item-----5");
-		package.add_listitem(HashUtil::randomString(8192));
-		*/
 		pkgList.push_back(node.SerializeAsString());
 	}
 }
 
-int benchmarkInsert() {
+int benchmarkAddNode() {
 
 	double start = 0;
 	double end = 0;
@@ -109,7 +93,7 @@ int benchmarkInsert() {
 	end = TimeUtil::getTime_msec();
 
 	char buf[200];
-	sprintf(buf, "Inserted packages, %d, %d, cost(ms), %f", numOfOps - errCount,
+	sprintf(buf, "Add Nodes, %d, %d, cost(ms), %f", numOfOps - errCount,
 			numOfOps, end - start);
 	cout << buf << endl;
 
@@ -117,22 +101,11 @@ int benchmarkInsert() {
 }
 
 
-
-
-int benchmarkAppend() {
+int benchmarkAddNodeEdge() {
 
 	vector<string> pkgList_append = pkgList;
 
 	vector<string>::iterator it;
-	//for (it = pkgList.begin(); it != pkgList.end(); it++) {
-
-	//	ZPack package;
-	//	package.ParseFromString((*it));
-
-	//	package. add_listitem("item-----6-append");
-
-	//	pkgList_append.push_back(package.SerializeAsString());
-	//}
 
 	double start = 0;
 	double end = 0;
@@ -150,7 +123,6 @@ int benchmarkAppend() {
 		node.ParseFromString(pkg_str);
 
         int ret = zpc.ZHTplusGraphAddNodeEdge(node.nodeid(), node.nodeid(), node.nodeid() + "-" + node.nodeid(), "e" + node.nodeid());
-        ret = zpc.ZHTplusGraphAddNodeEdgeProperty(node.nodeid(), node.nodeid() + "-" + node.nodeid(), node.nodeid() + "1", node.nodeid() + "1", node.nodeid() + "_val");
 
         if (ret < 0) {
 			errCount++;
@@ -160,14 +132,122 @@ int benchmarkAppend() {
 	end = TimeUtil::getTime_msec();
 
 	char buf[200];
-	sprintf(buf, "Appended packages, %d, %d, cost(ms), %f", numOfOps - errCount,
+	sprintf(buf, "Add NodeEdges, %d, %d, cost(ms), %f", numOfOps - errCount,
 			numOfOps, end - start);
 	cout << buf << endl;
 
 	return 0;
 }
 
-float benchmarkLookup() {
+int benchmarkAddNodeProperty() {
+
+	vector<string> pkgList_append = pkgList;
+
+	vector<string>::iterator it;
+
+	double start = 0;
+	double end = 0;
+	start = TimeUtil::getTime_msec();
+	int errCount = 0;
+
+    int c = 0;
+	for (it = pkgList_append.begin(); it != pkgList_append.end(); it++) {
+
+		c++;
+
+		string pkg_str = *it;
+
+		ZHTplusGraph::Node node;
+		node.ParseFromString(pkg_str);
+
+        int ret = zpc.ZHTplusGraphAddNodeProperty(node.nodeid(), node.nodeid() + "-id", node.nodeid() + "1", node.nodeid() + "_val");
+
+        if (ret < 0) {
+			errCount++;
+		}
+	}
+
+	end = TimeUtil::getTime_msec();
+
+	char buf[200];
+	sprintf(buf, "Add NodeProperties, %d, %d, cost(ms), %f", numOfOps - errCount,
+			numOfOps, end - start);
+	cout << buf << endl;
+
+	return 0;
+}
+
+int benchmarkAddNodeEdgeProperty() {
+
+	vector<string> pkgList_append = pkgList;
+
+	vector<string>::iterator it;
+
+	double start = 0;
+	double end = 0;
+	start = TimeUtil::getTime_msec();
+	int errCount = 0;
+
+    int c = 0;
+	for (it = pkgList_append.begin(); it != pkgList_append.end(); it++) {
+
+		c++;
+
+		string pkg_str = *it;
+
+		ZHTplusGraph::Node node;
+		node.ParseFromString(pkg_str);
+
+        int ret = zpc.ZHTplusGraphAddNodeEdgeProperty(node.nodeid(), node.nodeid() + "-" + node.nodeid(), node.nodeid() + "1", node.nodeid() + "1", node.nodeid() + "_val");
+
+        if (ret < 0) {
+			errCount++;
+		}
+	}
+
+	end = TimeUtil::getTime_msec();
+
+	char buf[200];
+	sprintf(buf, "Add NodeEdgeProperties, %d, %d, cost(ms), %f", numOfOps - errCount,
+			numOfOps, end - start);
+	cout << buf << endl;
+
+	return 0;
+}
+
+float benchmarkLookupNodeProperty() {
+
+	double start = 0;
+	double end = 0;
+	start = TimeUtil::getTime_msec();
+	int errCount = 0;
+
+	int c = 0;
+	vector<string>::iterator it;
+	for (it = pkgList.begin(); it != pkgList.end(); it++) {
+
+		string result;
+		c++;
+
+		string pkg_str = *it;
+		ZHTplusGraph::Node node;
+
+		node.ParseFromString(pkg_str);
+
+		string propertyValue = zpc.ZHTplusGraphGetNodePropertyValue(node.nodeid(), node.nodeid() + "-id");
+	}
+
+	end = TimeUtil::getTime_msec();
+
+	char buf[200];
+	sprintf(buf, "Lookup NodeProperties, %d, %d, cost(ms), %f", numOfOps - errCount,
+            numOfOps, end - start);
+	cout << buf << endl;
+
+	return 0;
+}
+
+float benchmarkLookupNodeEdgeProperty() {
 
 	double start = 0;
 	double end = 0;
@@ -187,20 +267,13 @@ float benchmarkLookup() {
 		node.ParseFromString(pkg_str);
 
 		string propertyValue = zpc.ZHTplusGraphGetNodeEdgePropertyValue(node.nodeid(), node.nodeid() + "-" + node.nodeid(), node.nodeid() + "1");
-
-		//cout << "Found result: "<< result << endl;
-//		if (ret < 0) {
-//			errCount++;
-//		} else if (result.empty()) { //empty string
-//			errCount++;
-//		}
 	}
 
 	end = TimeUtil::getTime_msec();
 
 	char buf[200];
-	sprintf(buf, "Lookuped packages, %d, %d, cost(ms), %f", numOfOps - errCount,
-			numOfOps, end - start);
+	sprintf(buf, "Lookup NodeEdgeProperties, %d, %d, cost(ms), %f", numOfOps - errCount,
+            numOfOps, end - start);
 	cout << buf << endl;
 
 	return 0;
@@ -255,13 +328,17 @@ int benchmark(string &zhtConf, string &neighborConf) {
 
 	init_packages();
 
-	benchmarkInsert();
+	benchmarkAddNode();
 
-    benchmarkAppend();
+    benchmarkAddNodeEdge();
 
-	benchmarkLookup();
+    benchmarkAddNodeProperty();
 
-	//benchmarkRemove();
+	benchmarkAddNodeEdgeProperty();
+
+	benchmarkLookupNodeProperty();
+
+	benchmarkLookupNodeEdgeProperty();
 
 	zpc.teardown();
 
