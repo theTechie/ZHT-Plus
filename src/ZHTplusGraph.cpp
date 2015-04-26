@@ -399,8 +399,10 @@ string ZHTplusClient::ZHTplusGraphPageRank(string StartNodeID, int ShowTopN)
 	for(i=0; i < 10; i++){
 		printf("\nRunning PageRank pass %d\n", i+1);
 		ZHTplusGraphPageRankCalculate(Q, hashtable, pagecounts);
-		ZHTplusGraphPageRankShowTopN(pagecounts, ShowTopN);
 	}
+
+	ZHTplusGraphPageRankShowTopN(pagecounts, ShowTopN);
+
 	return StartNodeID;
 }
 

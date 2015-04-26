@@ -151,7 +151,7 @@ void loadGraph() {
     start = TimeUtil::getTime_msec();
     char buffer[80];
 
-    cout << "Loading Graph..." << endl;
+   /* cout << "Loading Graph..." << endl;
 
     //while (infile >> a >> b) {
     for(int i = 0; i < 10000; i++) {
@@ -172,6 +172,7 @@ void loadGraph() {
     end = TimeUtil::getTime_msec();
 
     cout << "Graph Loading Completed ! Time in (ms) => " << end - start << endl;
+i*/
 
     for(int i = 5; i < 6; i++) {
 
@@ -195,7 +196,7 @@ void loadGraph() {
 
     	cout << "BFS Completed ! Time in (ms) => " << end - start << endl;*/
 
-   	start = TimeUtil::getTime_msec();
+ 	start = TimeUtil::getTime_msec();
 
    	cout << "PageRank : " << zpc.ZHTplusGraphPageRank(num.str().c_str(), 20) << endl;
 
