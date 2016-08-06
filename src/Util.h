@@ -87,6 +87,8 @@ public:
 };
 
 } /* namespace dm */
+namespace graph {
+} /* namespace graph */
 } /* namespace zht */
 } /* namespace datasys */
 } /* namespace iit */
